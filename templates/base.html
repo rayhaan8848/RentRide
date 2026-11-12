@@ -1,0 +1,349 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{% block title %}RideNepal | Explore Nepal Your Way{% endblock %}</title>
+
+    <meta name="description" content="Discover Nepal with RideNepal. Rent bikes, cars, jeeps, microbuses and buses easily.">
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    {% block extra_css %}{% endblock %}
+
+</head>
+
+<body>
+
+    <!-- ==========================
+         NAVBAR
+    ========================== -->
+
+    <header class="main-navbar" id="mainNavbar">
+
+        <nav class="navbar navbar-expand-lg" aria-label="Main navigation">
+            <div class="container">
+
+                <!-- Brand -->
+                <a class="navbar-brand" href="/" aria-label="RideNepal home">
+                    <img class="brand-logo" src="{% static 'images/logo2.png' %}" alt="Rent Ride">
+                </a>
+
+                <!-- Mobile Toggle -->
+                <button class="navbar-toggler"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#mainNavigation"
+                        aria-controls="mainNavigation"
+                        aria-expanded="false"
+                        aria-label="Toggle navigation">
+
+                    <span class="navbar-toggler-lines" aria-hidden="true">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </span>
+                </button>
+
+                <!-- Navigation -->
+                <div class="collapse navbar-collapse" id="mainNavigation">
+
+                    <ul class="navbar-nav mx-auto mb-3 mb-lg-0">
+
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.path == '/' %}active{% endif %}" href="/">
+                                <i class="bi bi-house-door me-1"></i>
+                                Home
+                            </a>
+                        </li>
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle {% if request.path == '/vehicles/' %}active{% endif %}"
+                               href="/vehicles/"
+                               id="vehiclesDropdown"
+                               role="button"
+                               data-bs-toggle="dropdown"
+                               aria-expanded="false">
+                                <i class="bi bi-car-front me-1"></i>
+                                Vehicles
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="vehiclesDropdown">
+                                <li><a class="dropdown-item" href="/vehicles/">Browse all vehicles</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="/vehicles/?type=bike">Motorcycles</a></li>
+                                <li><a class="dropdown-item" href="/vehicles/?type=car">Cars</a></li>
+                                <li><a class="dropdown-item" href="/vehicles/?type=jeep">Jeeps &amp; SUVs</a></li>
+                                <li><a class="dropdown-item" href="/vehicles/?type=microbus">Microbuses</a></li>
+                                <li><a class="dropdown-item" href="/vehicles/?type=bus">Buses</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.path == '/about/' %}active{% endif %}" href="/about/">
+                                About Us
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.path == '/pricing/' %}active{% endif %}" href="/pricing/">
+                                Pricing
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.path == '/contact/' %}active{% endif %}" href="/contact/">
+                                Contact
+                            </a>
+                        </li>
+
+                    </ul>
+
+                    <!-- Account and CTA -->
+                    <div class="navbar-actions d-flex align-items-center gap-3 flex-column flex-lg-row">
+
+                        <a href="/login/"
+                           class="nav-login {% if request.path == '/login/' %}active{% endif %}">
+                            <i class="bi bi-person-circle me-1"></i>
+                            Login
+                        </a>
+
+                        <a href="/vehicles/" class="nav-cta">
+                            Book a Ride
+                            <i class="bi bi-arrow-up-right"></i>
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </nav>
+
+    </header>
+
+
+    <!-- ==========================
+         PAGE CONTENT
+    ========================== -->
+
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+
+    <!-- ==========================
+         FOOTER
+    ========================== -->
+
+    <footer class="main-footer">
+
+        <div class="container">
+
+            <div class="row g-5">
+
+                <!-- Brand Section -->
+                <div class="col-lg-4 col-md-6">
+
+                    <a href="/" class="footer-brand">
+                        <i class="bi bi-car-front-fill footer-highlight"></i>
+                        Ride<span>Nepal</span>
+                    </a>
+
+                    <p class="footer-description">
+                        Your journey, our responsibility.
+                        Explore the beauty of Nepal with reliable,
+                        comfortable and affordable vehicle rental
+                        services. Wherever you want to go, we take
+                        you there.
+                    </p>
+
+                    <div class="footer-socials">
+
+                        <a href="#" aria-label="Facebook">
+                            <i class="bi bi-facebook"></i>
+                        </a>
+
+                        <a href="#" aria-label="Instagram">
+                            <i class="bi bi-instagram"></i>
+                        </a>
+
+                        <a href="#" aria-label="TikTok">
+                            <i class="bi bi-tiktok"></i>
+                        </a>
+
+                        <a href="#" aria-label="YouTube">
+                            <i class="bi bi-youtube"></i>
+                        </a>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Quick Links -->
+                <div class="col-lg-2 col-md-6">
+
+                    <h5 class="footer-title">Quick Links</h5>
+
+                    <ul class="footer-links">
+
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/vehicles/">Our Vehicles</a></li>
+                        <li><a href="/about/">About Us</a></li>
+                        <li><a href="/pricing/">Pricing</a></li>
+                        <li><a href="/contact/">Contact</a></li>
+
+                    </ul>
+
+                </div>
+
+
+                <!-- Vehicle Categories -->
+                <div class="col-lg-2 col-md-6">
+
+                    <h5 class="footer-title">Our Vehicles</h5>
+
+                    <ul class="footer-links">
+
+                        <li><a href="/vehicles/?type=bike">Motorcycles</a></li>
+                        <li><a href="/vehicles/?type=car">Cars</a></li>
+                        <li><a href="/vehicles/?type=jeep">Jeeps & SUVs</a></li>
+                        <li><a href="/vehicles/?type=microbus">Microbuses</a></li>
+                        <li><a href="/vehicles/?type=bus">Buses</a></li>
+
+                    </ul>
+
+                </div>
+
+
+                <!-- Contact -->
+                <div class="col-lg-4 col-md-6">
+
+                    <h5 class="footer-title">Get In Touch</h5>
+
+                    <div class="footer-contact">
+                        <i class="bi bi-geo-alt-fill"></i>
+                        <span>Kathmandu, Nepal</span>
+                    </div>
+
+                    <div class="footer-contact">
+                        <i class="bi bi-telephone-fill"></i>
+                        <span>+977 98XXXXXXXX</span>
+                    </div>
+
+                    <div class="footer-contact">
+                        <i class="bi bi-envelope-fill"></i>
+                        <span>info@ridenepal.com</span>
+                    </div>
+
+                    <div class="footer-contact">
+                        <i class="bi bi-clock-fill"></i>
+                        <span>Available 24/7 for your journey</span>
+                    </div>
+
+                    <!-- Newsletter -->
+                    <div class="footer-newsletter">
+
+                        <h6 class="text-white fw-bold">
+                            Stay Updated
+                        </h6>
+
+                        <p>
+                            Get updates about offers and new vehicles.
+                        </p>
+
+                        <p class="newsletter-note">Newsletter signup is a frontend preview and is not connected yet.</p>
+
+                        <div class="d-flex gap-2">
+                            <input type="email"
+                                   class="form-control"
+                                   placeholder="Your email address"
+                                   aria-label="Your email address"
+                                   disabled>
+
+                            <button type="button" class="newsletter-btn" aria-label="Newsletter signup preview" disabled>
+                                <i class="bi bi-send-fill"></i>
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Footer Bottom -->
+            <div class="footer-bottom">
+
+                <div class="row align-items-center">
+
+                    <div class="col-md-6">
+                        <p>
+                            © <span id="currentYear"></span>
+                            <span class="footer-highlight fw-bold">
+                                RideNepal
+                            </span>.
+                            All Rights Reserved.
+                        </p>
+                    </div>
+
+                    <div class="col-md-6 text-md-end text-end">
+
+                        <a href="/privacy/">Privacy Policy</a>
+
+                        <a href="/terms/">Terms & Conditions</a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </footer>
+
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+
+        const navbar = document.getElementById("mainNavbar");
+        if (navbar) {
+            const updateNavbarOnScroll = () => {
+                navbar.classList.toggle("scrolled", window.scrollY > 30);
+            };
+            updateNavbarOnScroll();
+            window.addEventListener("scroll", updateNavbarOnScroll, { passive: true });
+        }
+
+        const currentYear = document.getElementById("currentYear");
+        if (currentYear) {
+            currentYear.textContent = new Date().getFullYear();
+        }
+
+    </script>
+
+    {% block extra_js %}{% endblock %}
+
+</body>
+</html>

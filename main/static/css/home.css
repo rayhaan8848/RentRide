@@ -1,0 +1,766 @@
+/* =========================================
+   RIDENEPAL - HOME PAGE
+   Modern Blue & Cyan Theme
+========================================= */
+
+:root {
+    --primary: #087bc1;
+    --secondary: #08b8d0;
+    --dark: #102d49;
+    --text: #52677c;
+    --light: #f1f8ff;
+    --white: #ffffff;
+    --border: #e2edf8;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+.hero-section {
+    min-height: 570px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    margin-top: -86px;
+    padding-top: 86px;
+    background:
+        linear-gradient(90deg,
+            rgba(5, 39, 72, .78),
+            rgba(5, 66, 115, .35) 55%,
+            rgba(4, 41, 77, .25)),
+        url("../images/bg.png") center 55% / cover no-repeat;
+}
+
+.hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(0deg,
+            rgba(4, 35, 65, .25),
+            transparent 55%);
+}
+
+.hero-container {
+    position: relative;
+    z-index: 2;
+    width: min(1200px, 92%);
+    margin: auto;
+    padding: 65px 0;
+    display: grid;
+    grid-template-columns: 1.15fr .85fr;
+    gap: 55px;
+    align-items: center;
+}
+
+.hero-content {
+    color: var(--white);
+    max-width: 650px;
+}
+
+.hero-tag,
+.section-tag {
+    display: inline-block;
+    color: var(--secondary);
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 3px;
+    margin-bottom: 18px;
+}
+
+.hero-tag {
+    color: #a9edff;
+}
+
+.hero-content h1 {
+    font-size: clamp(38px, 5vw, 62px);
+    line-height: 1.13;
+    font-weight: 800;
+    margin: 0 0 18px;
+    letter-spacing: -2px;
+}
+
+.hero-content h1 span {
+    color: #ffc343;
+}
+
+.hero-content p {
+    color: #edf8ff;
+    font-size: 17px;
+    line-height: 1.8;
+    max-width: 500px;
+    margin-bottom: 28px;
+}
+
+.primary-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 15px 25px;
+    border-radius: 10px;
+    background: linear-gradient(120deg, var(--secondary), var(--primary));
+    color: white;
+    text-decoration: none;
+    font-weight: 700;
+    transition: .3s;
+}
+
+.primary-btn:hover {
+    transform: translateY(-3px);
+    color: white;
+    box-shadow: 0 10px 25px rgba(0, 130, 200, .3);
+}
+
+
+/* =========================================
+   BOOKING FORM
+========================================= */
+
+.booking-card {
+    position: relative;
+    isolation: isolate;
+    width: 100%;
+    max-width: 450px;
+    justify-self: end;
+    overflow: hidden;
+    padding: 28px;
+    border: 1px solid rgba(255, 255, 255, .62);
+    border-radius: 24px;
+    background: linear-gradient(145deg, rgba(255, 255, 255, .38), rgba(226, 245, 255, .18));
+    -webkit-backdrop-filter: blur(26px) saturate(175%);
+    backdrop-filter: blur(26px) saturate(175%);
+    box-shadow:
+        0 24px 65px rgba(0, 24, 50, .28),
+        0 6px 20px rgba(0, 80, 130, .12),
+        inset 0 1px 0 rgba(255, 255, 255, .88),
+        inset 0 -1px 0 rgba(255, 255, 255, .2);
+}
+
+.booking-card::before {
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    border-radius: inherit;
+    background:
+        radial-gradient(ellipse at 8% 0%, rgba(255, 255, 255, .48), transparent 48%),
+        linear-gradient(125deg, rgba(255, 255, 255, .14), transparent 55%);
+    content: "";
+    pointer-events: none;
+}
+
+.booking-card > * {
+    position: relative;
+    z-index: 1;
+}
+
+.booking-heading {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    margin-bottom: 25px;
+    color: #b8f5ff;
+}
+
+.booking-heading i {
+    font-size: 25px;
+}
+
+.booking-heading h2 {
+    color: #fff;
+    font-size: 21px;
+    font-weight: 800;
+    margin: 0;
+    text-shadow: 0 2px 12px rgba(0, 31, 56, .28);
+}
+
+.booking-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px 14px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+}
+
+.form-group label {
+    font-size: 13px;
+    font-weight: 700;
+    color: rgba(255, 255, 255, .94);
+    text-shadow: 0 1px 8px rgba(0, 31, 56, .3);
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    min-width: 0;
+    height: 48px;
+    border: 1px solid rgba(255, 255, 255, .58);
+    border-radius: 11px;
+    padding: 0 12px;
+    background: rgba(245, 251, 255, .82);
+    color: var(--dark);
+    font-size: 13px;
+    outline: none;
+    box-shadow: inset 0 1px 2px rgba(23, 50, 77, .05);
+    transition: border-color .25s ease, background-color .25s ease, box-shadow .25s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    border-color: rgba(33, 212, 194, .9);
+    background: rgba(255, 255, 255, .96);
+    box-shadow: 0 0 0 3px rgba(33, 212, 194, .2), 0 4px 14px rgba(0, 31, 56, .1);
+}
+
+.search-btn {
+    grid-column: 1 / -1;
+    width: 100%;
+    border: none;
+    border-radius: 10px;
+    padding: 15px;
+    background: linear-gradient(110deg, var(--secondary), var(--primary));
+    color: white;
+    font-weight: 800;
+    font-size: 15px;
+    cursor: pointer;
+    transition: .3s;
+}
+
+.search-btn i {
+    margin-left: 8px;
+}
+
+.search-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(8, 123, 193, .25);
+}
+
+.booking-security {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    color: rgba(255, 255, 255, .92);
+    font-size: 12px;
+    font-weight: 700;
+    margin-top: 19px;
+    text-shadow: 0 1px 8px rgba(0, 31, 56, .3);
+}
+
+.booking-security i {
+    color: #74f1df;
+}
+
+@supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+    .booking-card {
+        background: rgba(18, 60, 91, .94);
+    }
+}
+
+
+/* =========================================
+   BENEFITS
+========================================= */
+
+.benefits-section {
+    position: relative;
+    z-index: 3;
+    width: min(1200px, 92%);
+    margin: -20px auto 65px;
+    background: white;
+    border-radius: 17px;
+    box-shadow: 0 12px 35px rgba(20, 70, 110, .09);
+    padding: 25px 30px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.benefit-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    padding: 5px 15px;
+    border-right: 1px solid var(--border);
+}
+
+.benefit-item:last-child {
+    border-right: none;
+}
+
+.benefit-item>i {
+    color: var(--primary);
+    font-size: 28px;
+}
+
+.benefit-item h4 {
+    color: var(--dark);
+    font-size: 14px;
+    font-weight: 800;
+    margin: 0 0 5px;
+}
+
+.benefit-item p {
+    color: var(--text);
+    font-size: 12px;
+    margin: 0;
+}
+
+
+/* =========================================
+   COMMON SECTION
+========================================= */
+
+.section-container {
+    width: min(1200px, 92%);
+    margin: auto;
+}
+
+.vehicles-section {
+    padding: 10px 0 75px;
+}
+
+.section-container {
+    display: grid;
+    grid-template-columns: 230px 1fr;
+    gap: 35px;
+    align-items: center;
+}
+
+.section-intro h2 {
+    font-size: 30px;
+    line-height: 1.2;
+    color: var(--dark);
+    font-weight: 800;
+    margin: 0 0 13px;
+}
+
+.section-intro h2 span {
+    color: var(--primary);
+}
+
+.section-intro p {
+    font-size: 14px;
+    line-height: 1.8;
+    color: var(--text);
+    margin-bottom: 25px;
+}
+
+.outline-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    border: 1.5px solid var(--primary);
+    padding: 11px 18px;
+    border-radius: 30px;
+    text-decoration: none;
+    color: var(--primary);
+    font-size: 13px;
+    font-weight: 700;
+    transition: .3s;
+}
+
+.outline-btn:hover {
+    color: white;
+    background: var(--primary);
+}
+
+
+/* =========================================
+   VEHICLE CARDS
+========================================= */
+
+.vehicle-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.vehicle-card {
+    min-width: 0;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 13px;
+    overflow: hidden;
+    box-shadow: 0 5px 20px rgba(20, 60, 100, .06);
+    transition: .3s;
+}
+
+.vehicle-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 15px 30px rgba(20, 60, 100, .13);
+}
+
+.vehicle-image {
+    height: 155px;
+    position: relative;
+    overflow: hidden;
+}
+
+.vehicle-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: .5s;
+}
+
+.vehicle-card:hover .vehicle-image img {
+    transform: scale(1.06);
+}
+
+.vehicle-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: #ffc343;
+    color: #263d53;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 800;
+}
+
+.vehicle-info {
+    padding: 14px;
+}
+
+.vehicle-info h3 {
+    color: var(--dark);
+    font-size: 15px;
+    font-weight: 800;
+    margin: 0 0 10px;
+}
+
+.vehicle-price {
+    color: var(--primary);
+    font-size: 16px;
+    font-weight: 800;
+    margin-bottom: 12px;
+}
+
+.vehicle-price small {
+    color: var(--text);
+    font-size: 11px;
+    font-weight: 500;
+}
+
+.vehicle-details {
+    display: flex;
+    justify-content: space-between;
+    gap: 5px;
+    color: var(--text);
+    font-size: 10px;
+    margin-bottom: 15px;
+}
+
+.vehicle-details i {
+    color: var(--primary);
+    margin-right: 4px;
+}
+
+.book-btn {
+    display: block;
+    text-align: center;
+    background: var(--dark);
+    color: white;
+    text-decoration: none;
+    padding: 10px;
+    border-radius: 7px;
+    font-size: 12px;
+    font-weight: 700;
+    transition: .3s;
+}
+
+.book-btn:hover {
+    background: var(--primary);
+    color: white;
+}
+
+
+/* =========================================
+   DESTINATIONS
+========================================= */
+
+.destinations-section {
+    background: #f0f7ff;
+    padding: 75px 0;
+}
+
+.destination-container {
+    grid-template-columns: 230px 1fr;
+}
+
+.destination-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 15px;
+}
+
+.destination-card {
+    height: 185px;
+    position: relative;
+    border-radius: 13px;
+    overflow: hidden;
+    box-shadow: 0 8px 20px rgba(20, 50, 80, .12);
+}
+
+.destination-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(transparent 45%, rgba(0, 20, 40, .75));
+}
+
+.destination-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: .5s;
+}
+
+.destination-card:hover img {
+    transform: scale(1.08);
+}
+
+.destination-name {
+    position: absolute;
+    z-index: 2;
+    bottom: 15px;
+    left: 15px;
+    color: white;
+    font-weight: 800;
+    font-size: 15px;
+}
+
+
+/* =========================================
+   CTA SECTION
+========================================= */
+
+.cta-section {
+    width: min(1200px, 92%);
+    margin: 65px auto;
+    padding: 32px 40px;
+    border-radius: 17px;
+    color: white;
+    background:
+        linear-gradient(90deg, rgba(3, 37, 74, .95), rgba(0, 105, 160, .65)),
+        url("../images/hero-bg.jpg") center / cover;
+}
+
+.cta-content {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+}
+
+.cta-content>i {
+    font-size: 42px;
+    color: #ffc343;
+}
+
+.cta-content h2 {
+    font-size: 24px;
+    font-weight: 800;
+    margin: 0 0 7px;
+}
+
+.cta-content p {
+    color: #d7eaff;
+    font-size: 14px;
+    margin: 0;
+}
+
+.cta-btn {
+    margin-left: auto;
+    background: white;
+    color: var(--dark);
+    text-decoration: none;
+    padding: 13px 23px;
+    border-radius: 30px;
+    white-space: nowrap;
+    font-size: 13px;
+    font-weight: 800;
+    transition: .3s;
+}
+
+.cta-btn:hover {
+    background: #ffc343;
+    color: var(--dark);
+}
+
+
+/* =========================================
+   RESPONSIVE DESIGN
+========================================= */
+
+@media (max-width: 1050px) {
+
+    .hero-container {
+        gap: 25px;
+    }
+
+    .section-container,
+    .destination-container {
+        grid-template-columns: 1fr;
+    }
+
+    .section-intro {
+        max-width: 500px;
+    }
+
+    .vehicle-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .destination-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .benefit-item {
+        padding: 12px;
+    }
+}
+
+
+@media (max-width: 768px) {
+
+    .hero-section {
+        margin-top: -76px;
+        padding-top: 76px;
+    }
+
+    .hero-container {
+        grid-template-columns: 1fr;
+        padding: 65px 0 55px;
+    }
+
+    .hero-section {
+        background-position: center;
+    }
+
+    .hero-content {
+        text-align: center;
+        margin: auto;
+    }
+
+    .hero-content p {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .booking-card {
+        justify-self: center;
+        max-width: 500px;
+    }
+
+    .benefits-section {
+        grid-template-columns: repeat(2, 1fr);
+        margin-top: -15px;
+    }
+
+    .benefit-item:nth-child(2) {
+        border-right: none;
+    }
+
+    .benefit-item:nth-child(1),
+    .benefit-item:nth-child(2) {
+        border-bottom: 1px solid var(--border);
+    }
+
+    .cta-content {
+        flex-wrap: wrap;
+    }
+
+    .cta-btn {
+        margin-left: 0;
+    }
+}
+
+
+@media (max-width: 480px) {
+
+    .hero-content h1 {
+        font-size: 37px;
+    }
+
+    .hero-content p {
+        font-size: 14px;
+    }
+
+    .booking-card {
+        padding: 20px 15px;
+    }
+
+    .booking-heading h2 {
+        font-size: 18px;
+    }
+
+    .booking-form {
+        gap: 15px 9px;
+    }
+
+    .form-group input,
+    .form-group select {
+        font-size: 11px;
+        padding: 0 7px;
+    }
+
+    .benefits-section {
+        padding: 15px 5px;
+    }
+
+    .benefit-item {
+        justify-content: flex-start;
+        gap: 9px;
+    }
+
+    .benefit-item>i {
+        font-size: 21px;
+    }
+
+    .benefit-item h4 {
+        font-size: 11px;
+    }
+
+    .benefit-item p {
+        font-size: 10px;
+    }
+
+    .vehicle-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .vehicle-image {
+        height: 210px;
+    }
+
+    .destination-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+
+    .destination-card {
+        height: 145px;
+    }
+
+    .destination-name {
+        font-size: 12px;
+        left: 10px;
+    }
+
+    .cta-section {
+        padding: 25px 20px;
+    }
+
+    .cta-content h2 {
+        font-size: 19px;
+    }
+
+    .cta-content>i {
+        font-size: 30px;
+    }
+}
