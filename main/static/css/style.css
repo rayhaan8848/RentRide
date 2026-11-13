@@ -285,6 +285,10 @@ a {
     transform: translateY(-3px);
 }
 
+.nav-cta:active {
+    transform: scale(0.98);
+}
+
 .nav-cta:hover::before {
     transform: translateX(120%) skewX(-18deg);
 }

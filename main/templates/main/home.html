@@ -99,40 +99,47 @@
 <!-- BENEFITS SECTION -->
 <section class="benefits-section">
 
-    <div class="benefit-item">
-        <i class="fa-solid fa-shield-halved"></i>
-        <div>
-            <h4>Trusted Vehicles</h4>
-            <p>Well Maintained Fleet</p>
-        </div>
+    <div class="benefits-heading">
+        <span class="section-tag">WHY RENT RIDE</span>
+        <h2>A Better Way to <span>Travel</span></h2>
+        <p>Thoughtful service and reliable rides, from booking to arrival.</p>
     </div>
 
-    <div class="benefit-item">
-        <i class="fa-solid fa-tag"></i>
-        <div>
-            <h4>Affordable Pricing</h4>
-            <p>Best Rates in Nepal</p>
-        </div>
-    </div>
+    <div class="benefits-grid">
+        <article class="benefit-item">
+            <span class="benefit-icon" aria-hidden="true">
+                <i class="bi bi-shield-check"></i>
+            </span>
+            <h3>Trusted Vehicles</h3>
+            <p>Well-maintained rides for a more comfortable journey.</p>
+        </article>
 
-    <div class="benefit-item">
-        <i class="fa-solid fa-headset"></i>
-        <div>
-            <h4>24/7 Support</h4>
-            <p>Always Here for You</p>
-        </div>
-    </div>
+        <article class="benefit-item">
+            <span class="benefit-icon" aria-hidden="true">
+                <i class="bi bi-cash-coin"></i>
+            </span>
+            <h3>Clear, Fair Pricing</h3>
+            <p>See the daily rate upfront before you book.</p>
+        </article>
 
-    <div class="benefit-item">
-        <i class="fa-solid fa-location-dot"></i>
-        <div>
-            <h4>Easy Booking</h4>
-            <p>Quick & Simple</p>
-        </div>
+        <article class="benefit-item">
+            <span class="benefit-icon" aria-hidden="true">
+                <i class="bi bi-headset"></i>
+            </span>
+            <h3>Helpful Support</h3>
+            <p>Get assistance when you need a hand with your trip.</p>
+        </article>
+
+        <article class="benefit-item">
+            <span class="benefit-icon" aria-hidden="true">
+                <i class="bi bi-lightning-charge"></i>
+            </span>
+            <h3>Easy Booking</h3>
+            <p>Find your ride and arrange your journey in a few steps.</p>
+        </article>
     </div>
 
 </section>
-
 
 <!-- VEHICLES SECTION -->
 <section class="vehicles-section" id="vehicles">
@@ -242,4 +249,10 @@
 
 </section>
 
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js" defer></script>
+<script src="{% static 'js/home.js' %}" defer></script>
 {% endblock %}

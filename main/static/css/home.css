@@ -30,7 +30,7 @@ html {
             rgba(5, 39, 72, .78),
             rgba(5, 66, 115, .35) 55%,
             rgba(4, 41, 77, .25)),
-        url("../images/bg.png") center 55% / cover no-repeat;
+        url("../images/background.png") center 55% / cover no-repeat;
 }
 
 .hero-overlay {
@@ -111,6 +111,31 @@ html {
     box-shadow: 0 10px 25px rgba(0, 130, 200, .3);
 }
 
+.primary-btn i,
+.search-btn i,
+.outline-btn i,
+.book-btn i,
+.cta-btn i {
+    display: inline-block;
+    transition: transform .22s ease;
+}
+
+.primary-btn:hover i,
+.search-btn:hover i,
+.outline-btn:hover i,
+.book-btn:hover i,
+.cta-btn:hover i {
+    transform: translateX(3px);
+}
+
+.primary-btn:active,
+.search-btn:active,
+.outline-btn:active,
+.book-btn:active,
+.cta-btn:active {
+    transform: scale(.98);
+}
+
 
 /* =========================================
    BOOKING FORM
@@ -148,7 +173,7 @@ html {
     pointer-events: none;
 }
 
-.booking-card > * {
+.booking-card>* {
     position: relative;
     z-index: 1;
 }
@@ -269,44 +294,125 @@ html {
     position: relative;
     z-index: 3;
     width: min(1200px, 92%);
-    margin: -20px auto 65px;
-    background: white;
-    border-radius: 17px;
-    box-shadow: 0 12px 35px rgba(20, 70, 110, .09);
-    padding: 25px 30px;
+    margin: -20px auto 75px;
+}
+
+.benefits-heading {
+    margin-bottom: 28px;
+    text-align: center;
+}
+
+.benefits-heading .section-tag {
+    margin-bottom: 8px;
+}
+
+.benefits-heading h2 {
+    color: var(--dark);
+    font-size: clamp(26px, 3vw, 36px);
+    font-weight: 800;
+    margin: 0 0 8px;
+}
+
+.benefits-heading h2 span {
+    color: var(--primary);
+}
+
+.benefits-heading p {
+    color: var(--text);
+    margin: 0;
+}
+
+.benefits-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 18px;
 }
 
 .benefit-item {
+    min-height: 205px;
+    position: relative;
+    overflow: hidden;
     display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 15px;
-    padding: 5px 15px;
-    border-right: 1px solid var(--border);
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 24px;
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    background: linear-gradient(145deg, #ffffff, #f8fcff);
+    box-shadow: 0 10px 28px rgba(20, 70, 110, .07);
+    transition: border-color .25s ease, box-shadow .25s ease, transform .25s ease;
 }
 
-.benefit-item:last-child {
-    border-right: none;
+.benefit-item::before {
+    position: absolute;
+    inset: 0 auto auto 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, var(--secondary), var(--primary));
+    content: "";
 }
 
-.benefit-item>i {
+.benefit-item:hover {
+    transform: translateY(-5px);
+    border-color: rgba(8, 123, 193, .3);
+    box-shadow: 0 18px 35px rgba(20, 70, 110, .13);
+}
+
+.benefit-icon {
+    width: 52px;
+    height: 52px;
+    display: grid;
+    place-items: center;
+    margin-bottom: 19px;
+    border-radius: 15px;
+    background: linear-gradient(135deg, rgba(8, 184, 208, .13), rgba(8, 123, 193, .12));
     color: var(--primary);
-    font-size: 28px;
+    font-size: 25px;
+    transition: transform .25s ease, background .25s ease;
 }
 
-.benefit-item h4 {
+.benefit-item:hover .benefit-icon {
+    transform: rotate(-6deg) scale(1.06);
+    background: linear-gradient(135deg, rgba(8, 184, 208, .22), rgba(8, 123, 193, .2));
+}
+
+.benefit-item h3 {
     color: var(--dark);
-    font-size: 14px;
+    font-size: 17px;
     font-weight: 800;
-    margin: 0 0 5px;
+    margin: 0 0 8px;
 }
 
 .benefit-item p {
     color: var(--text);
-    font-size: 12px;
+    font-size: 14px;
+    line-height: 1.65;
     margin: 0;
+}
+
+.motion-reveal {
+    opacity: 0;
+    transform: translate3d(0, 24px, 0);
+    transition: opacity .7s ease, transform .7s cubic-bezier(.2, .75, .25, 1),
+        border-color .25s ease, box-shadow .25s ease;
+    transition-delay: var(--motion-delay, 0ms);
+}
+
+.motion-reveal.is-visible {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+}
+
+.benefit-item.motion-reveal.is-visible:hover {
+    transform: translateY(-5px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .motion-reveal {
+        opacity: 1;
+        transform: none;
+        transition: none;
+    }
 }
 
 
@@ -479,6 +585,10 @@ html {
     color: white;
 }
 
+.book-btn:active {
+    transform: scale(.98);
+}
+
 
 /* =========================================
    DESTINATIONS
@@ -599,6 +709,10 @@ html {
     color: var(--dark);
 }
 
+.cta-btn:active {
+    transform: scale(.98);
+}
+
 
 /* =========================================
    RESPONSIVE DESIGN
@@ -627,9 +741,6 @@ html {
         grid-template-columns: repeat(2, 1fr);
     }
 
-    .benefit-item {
-        padding: 12px;
-    }
 }
 
 
@@ -665,17 +776,11 @@ html {
     }
 
     .benefits-section {
-        grid-template-columns: repeat(2, 1fr);
         margin-top: -15px;
     }
 
-    .benefit-item:nth-child(2) {
-        border-right: none;
-    }
-
-    .benefit-item:nth-child(1),
-    .benefit-item:nth-child(2) {
-        border-bottom: 1px solid var(--border);
+    .benefits-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
     .cta-content {
@@ -717,24 +822,31 @@ html {
     }
 
     .benefits-section {
-        padding: 15px 5px;
+        margin-bottom: 55px;
+    }
+
+    .benefits-heading {
+        margin-bottom: 20px;
     }
 
     .benefit-item {
-        justify-content: flex-start;
-        gap: 9px;
+        min-height: 0;
+        padding: 18px 15px;
     }
 
-    .benefit-item>i {
-        font-size: 21px;
+    .benefit-icon {
+        width: 44px;
+        height: 44px;
+        margin-bottom: 14px;
+        font-size: 22px;
     }
 
-    .benefit-item h4 {
-        font-size: 11px;
+    .benefit-item h3 {
+        font-size: 14px;
     }
 
     .benefit-item p {
-        font-size: 10px;
+        font-size: 12px;
     }
 
     .vehicle-grid {
