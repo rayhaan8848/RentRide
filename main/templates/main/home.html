@@ -156,85 +156,28 @@
 
         <div class="vehicle-grid">
 
-            <!-- VEHICLE 1 -->
-            <div class="vehicle-card">
-                <div class="vehicle-image">
-                    <img src="{% static 'images/fortuner.png' %}" alt="Toyota Fortuner">
-                    <span class="vehicle-badge">Popular</span>
-                </div>
-
-                <div class="vehicle-info">
-                    <h3>Toyota Fortuner</h3>
-                    <div class="vehicle-price">Rs. 12,000 <small>/ day</small></div>
-
-                    <div class="vehicle-details">
-                        <span><i class="fa-solid fa-users"></i> 7 Seats</span>
-                        <span><i class="fa-solid fa-gear"></i> Automatic</span>
+            {% for vehicle in vehicles %}
+                <div class="vehicle-card">
+                    <div class="vehicle-image">
+                        <img src="{{ vehicle.main_image.url }}" alt="{{ vehicle.name }}">
+                        <span class="vehicle-badge">{{ vehicle.category.name }}</span>
                     </div>
 
-                    <a href="#" class="book-btn">Book Now <i class="fa-solid fa-arrow-right"></i></a>
-                </div>
-            </div>
+                    <div class="vehicle-info">
+                        <h3>{{ vehicle.name }}</h3>
+                        <div class="vehicle-price">Rs. {{ vehicle.daily_price }} <small>/ day</small></div>
 
+                        <div class="vehicle-details">
+                            <span><i class="fa-solid fa-users"></i> {{ vehicle.seats }} Seats</span>
+                            <span><i class="fa-solid fa-gear"></i> {{ vehicle.get_transmission_display }}</span>
+                        </div>
 
-            <!-- VEHICLE 2 -->
-            <div class="vehicle-card">
-                <div class="vehicle-image">
-                    <img src="{% static 'images/creta.jpg' %}" alt="Hyundai Creta">
-                </div>
-
-                <div class="vehicle-info">
-                    <h3>Hyundai Creta</h3>
-                    <div class="vehicle-price">Rs. 8,000 <small>/ day</small></div>
-
-                    <div class="vehicle-details">
-                        <span><i class="fa-solid fa-users"></i> 5 Seats</span>
-                        <span><i class="fa-solid fa-gear"></i> Automatic</span>
+                        <a href="#" class="book-btn">Book Now <i class="fa-solid fa-arrow-right"></i></a>
                     </div>
-
-                    <a href="#" class="book-btn">Book Now <i class="fa-solid fa-arrow-right"></i></a>
                 </div>
-            </div>
-
-
-            <!-- VEHICLE 3 -->
-            <div class="vehicle-card">
-                <div class="vehicle-image">
-                    <img src="{% static 'images/bike.jpg' %}" alt="Royal Enfield Himalayan">
-                </div>
-
-                <div class="vehicle-info">
-                    <h3>Royal Enfield Himalayan</h3>
-                    <div class="vehicle-price">Rs. 3,000 <small>/ day</small></div>
-
-                    <div class="vehicle-details">
-                        <span><i class="fa-solid fa-users"></i> 2 Seats</span>
-                        <span><i class="fa-solid fa-gear"></i> Manual</span>
-                    </div>
-
-                    <a href="#" class="book-btn">Book Now <i class="fa-solid fa-arrow-right"></i></a>
-                </div>
-            </div>
-
-
-            <!-- VEHICLE 4 -->
-            <div class="vehicle-card">
-                <div class="vehicle-image">
-                    <img src="{% static 'images/hiace.jpg' %}" alt="Toyota Hiace">
-                </div>
-
-                <div class="vehicle-info">
-                    <h3>Toyota Hiace</h3>
-                    <div class="vehicle-price">Rs. 10,000 <small>/ day</small></div>
-
-                    <div class="vehicle-details">
-                        <span><i class="fa-solid fa-users"></i> 14 Seats</span>
-                        <span><i class="fa-solid fa-gear"></i> Manual</span>
-                    </div>
-
-                    <a href="#" class="book-btn">Book Now <i class="fa-solid fa-arrow-right"></i></a>
-                </div>
-            </div>
+            {% empty %}
+                <p>No vehicles are currently available.</p>
+            {% endfor %}
 
         </div>
     </div>
@@ -242,7 +185,7 @@
 
 
 <!-- DESTINATIONS SECTION -->
-<section class="destinations-section">
+<section class="destinations-section" id="destinations">
 
     <div class="section-container destination-container">
 
@@ -250,11 +193,10 @@
             <span class="section-tag">EXPLORE NEPAL</span>
             <h2>Discover Beautiful <span>Destinations</span></h2>
             <p>
-                From the serene lakes of Pokhara to
-                the breathtaking mountains of Mustang.
+                Explore the pickup and return locations available across Nepal.
             </p>
 
-            <a href="#" class="outline-btn">
+            <a href="#destinations" class="outline-btn">
                 Explore Destinations
                 <i class="fa-solid fa-arrow-right"></i>
             </a>
@@ -263,33 +205,19 @@
 
         <div class="destination-grid">
 
-            <div class="destination-card">
-                <img src="{% static 'images/pokhara.jpg' %}" alt="Pokhara">
-                <div class="destination-name">
-                    <i class="fa-solid fa-location-dot"></i> Pokhara
+            {% for location in locations %}
+                <div class="destination-card">
+                    {% if location.image %}
+                        <img src="{{ location.image.url }}" alt="{{ location.name }}">
+                    {% endif %}
+                    <div class="destination-name">
+                        <i class="fa-solid fa-location-dot"></i> {{ location.name }}
+                        <small>{{ location.district }}</small>
+                    </div>
                 </div>
-            </div>
-
-            <div class="destination-card">
-                <img src="{% static 'images/mustang.jpg' %}" alt="Mustang">
-                <div class="destination-name">
-                    <i class="fa-solid fa-location-dot"></i> Mustang
-                </div>
-            </div>
-
-            <div class="destination-card">
-                <img src="{% static 'images/nagarkot.jpg' %}" alt="Nagarkot">
-                <div class="destination-name">
-                    <i class="fa-solid fa-location-dot"></i> Nagarkot
-                </div>
-            </div>
-
-            <div class="destination-card">
-                <img src="{% static 'images/chitwan.jpg' %}" alt="Chitwan">
-                <div class="destination-name">
-                    <i class="fa-solid fa-location-dot"></i> Chitwan
-                </div>
-            </div>
+            {% empty %}
+                <p>No locations are currently available.</p>
+            {% endfor %}
 
         </div>
     </div>
