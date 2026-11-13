@@ -41,7 +41,10 @@ INSTALLED_APPS = [
 EXTERNAL_APPS=[
     'cloudinary',
     'cloudinary_storage',
-    'main'
+    'main',
+    'accounts',
+    'rentals',
+    'bookings',
 ]
 INSTALLED_APPS.extend(EXTERNAL_APPS)
 
@@ -73,6 +76,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'rentride.wsgi.application'
+AUTH_USER_MODEL = 'accounts.User'
 
 
 # Database
@@ -155,3 +159,4 @@ secure=True
 )
 
 # couldnary ko part ends
+
