@@ -1,4 +1,62 @@
 (() => {
+    const searchForm = document.querySelector("#vehicleSearchForm");
+    const queryInput = document.querySelector("#vehicleQuery");
+    const categoryInput = document.querySelector("#vehicleCategory");
+    const maxPriceInput = document.querySelector("#maxPrice");
+    const vehicleCards = Array.from(document.querySelectorAll("[data-vehicle-card]"));
+    const resultsCount = document.querySelector("#vehicleResultsCount");
+    const filterEmptyState = document.querySelector("#vehicleFilterEmpty");
+
+    const applyVehicleFilters = () => {
+        const query = queryInput?.value.trim().toLocaleLowerCase() || "";
+        const category = categoryInput?.value || "";
+        const maxPriceValue = Number.parseFloat(maxPriceInput?.value || "");
+        const maxPrice = Number.isFinite(maxPriceValue) ? maxPriceValue : Infinity;
+        let visibleCount = 0;
+
+        vehicleCards.forEach((card) => {
+            const matchesQuery = `${card.dataset.name} ${card.dataset.brand} ${card.dataset.categoryName}`
+                .toLocaleLowerCase()
+                .includes(query);
+            const matchesCategory = !category || card.dataset.category === category;
+            const matchesPrice = Number(card.dataset.price) <= maxPrice;
+            const isVisible = matchesQuery && matchesCategory && matchesPrice;
+
+            card.hidden = !isVisible;
+            visibleCount += Number(isVisible);
+        });
+
+        if (resultsCount) {
+            resultsCount.textContent = `${visibleCount} ${visibleCount === 1 ? "ride" : "rides"} available`;
+        }
+        if (filterEmptyState) {
+            filterEmptyState.hidden = visibleCount > 0;
+        }
+    };
+
+    if (searchForm) {
+        const parameters = new URLSearchParams(window.location.search);
+        queryInput.value = parameters.get("q") || "";
+        categoryInput.value = parameters.get("category") || "";
+        maxPriceInput.value = parameters.get("max_price") || "";
+
+        searchForm.addEventListener("submit", (event) => {
+            event.preventDefault();
+            applyVehicleFilters();
+            document.querySelector("#vehicles")?.scrollIntoView({ behavior: "smooth" });
+        });
+        searchForm.addEventListener("input", applyVehicleFilters);
+        searchForm.addEventListener("change", applyVehicleFilters);
+        applyVehicleFilters();
+    }
+
+    document.querySelector("#clearVehicleFilters")?.addEventListener("click", () => {
+        searchForm?.reset();
+        applyVehicleFilters();
+        window.history.replaceState({}, "", `${window.location.pathname}#vehicles`);
+        queryInput?.focus();
+    });
+
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const revealGroups = [
         {

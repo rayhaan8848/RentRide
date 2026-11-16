@@ -57,3 +57,29 @@ class SignUpTests(TestCase):
 
         user = User.objects.get(email='alex@another.example')
         self.assertEqual(user.username, 'alex-1')
+
+
+class LogoutTests(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(
+            username='alex',
+            email='alex@example.com',
+            password='Long-Random-Password-948!',
+        )
+        self.client.force_login(self.user)
+
+    def test_logout_ends_session_and_redirects_home(self):
+        response = self.client.post(reverse('logout'))
+
+        self.assertRedirects(
+            response,
+            reverse('home'),
+            fetch_redirect_response=False,
+        )
+        self.assertFalse(response.wsgi_request.user.is_authenticated)
+
+    def test_logout_rejects_get_requests(self):
+        response = self.client.get(reverse('logout'))
+
+        self.assertEqual(response.status_code, 405)
+        self.assertTrue(response.wsgi_request.user.is_authenticated)

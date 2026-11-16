@@ -1,0 +1,452 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Dashboard | RentRide</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="{% static 'css/admin_dashboard.css' %}">
+</head>
+
+<body>
+
+<div class="admin-wrapper">
+
+    <!-- SIDEBAR -->
+    <aside class="admin-sidebar" id="adminSidebar">
+
+        <a href="{% url 'home' %}" class="admin-brand">
+            <span class="brand-icon">
+                <i class="bi bi-car-front-fill"></i>
+            </span>
+            Rent<span>Ride</span>
+            <small>ADMIN</small>
+        </a>
+
+        <div class="admin-section-label">OVERVIEW</div>
+
+        <nav class="admin-nav">
+
+            <a href="#overview" class="admin-link active">
+                <i class="bi bi-grid-fill"></i>
+                Dashboard
+            </a>
+
+        </nav>
+
+        <div class="admin-section-label">MANAGEMENT</div>
+
+        <nav class="admin-nav">
+
+            <a href="#users" class="admin-link">
+                <i class="bi bi-people-fill"></i>
+                Users
+            </a>
+
+            <a href="#vehicles" class="admin-link">
+                <i class="bi bi-car-front-fill"></i>
+                Vehicles
+                {% if pending_vehicles %}
+                <span class="admin-count">{{ pending_vehicles }}</span>
+                {% endif %}
+            </a>
+
+            <a href="#bookings" class="admin-link">
+                <i class="bi bi-calendar-check-fill"></i>
+                Bookings
+            </a>
+
+            <a href="#payments" class="admin-link">
+                <i class="bi bi-wallet-fill"></i>
+                Payments
+            </a>
+
+            <a href="#reports" class="admin-link">
+                <i class="bi bi-bar-chart-fill"></i>
+                Reports
+            </a>
+
+        </nav>
+
+        <div class="admin-section-label">SYSTEM</div>
+
+        <nav class="admin-nav">
+
+            <a href="/admin/" class="admin-link">
+                <i class="bi bi-gear-fill"></i>
+                Django Administration
+            </a>
+
+            <a href="{% url 'home' %}" class="admin-link">
+                <i class="bi bi-globe"></i>
+                Visit Website
+            </a>
+
+        </nav>
+
+        <div class="admin-sidebar-bottom">
+            <div class="admin-security-card">
+                <i class="bi bi-shield-check"></i>
+                <h6>Administrator Access</h6>
+                <p>You have access to RentRide marketplace management.</p>
+            </div>
+
+            <form action="{% url 'logout' %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="admin-link logout-button">
+                    <i class="bi bi-box-arrow-right"></i>
+                    Log out
+                </button>
+            </form>
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+    <main class="admin-main" id="overview">
+
+        <!-- TOPBAR -->
+        <header class="admin-topbar">
+
+            <div class="admin-top-left">
+                <button class="admin-menu-toggle" id="adminMenuToggle">
+                    <i class="bi bi-list"></i>
+                </button>
+
+                <div>
+                    <span class="admin-breadcrumb">RentRide / Administration</span>
+                    <h5>Admin Dashboard</h5>
+                </div>
+            </div>
+
+            <div class="admin-top-right">
+
+                <span class="admin-status">
+                    <span></span> System Administrator
+                </span>
+
+                <div class="admin-user">
+
+                    {% if request.user.profile_image %}
+                        <img src="{{ request.user.profile_image.url }}" alt="Admin">
+                    {% else %}
+                        <div class="admin-avatar">
+                            {{ request.user.username|first|upper }}
+                        </div>
+                    {% endif %}
+
+                    <div>
+                        <strong>{{ request.user.fullname|default:request.user.username }}</strong>
+                        <small>Administrator</small>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <section class="admin-page">
+
+            <!-- WELCOME -->
+            <div class="admin-welcome">
+                <div>
+                    <span class="admin-eyebrow">CONTROL CENTER</span>
+                    <h2>Welcome, Administrator!</h2>
+                    <p>Monitor your marketplace and manage RentRide operations.</p>
+                </div>
+
+                <a href="/admin/" class="admin-primary-btn">
+                    <i class="bi bi-gear"></i>
+                    Admin Panel
+                </a>
+            </div>
+
+
+            <!-- STATISTICS -->
+            <div class="admin-stats">
+
+                <div class="admin-stat-card">
+                    <div class="admin-stat-header">
+                        <span>Total Users</span>
+                        <div class="admin-stat-icon blue">
+                            <i class="bi bi-people-fill"></i>
+                        </div>
+                    </div>
+                    <h2>{{ total_users|default:0 }}</h2>
+                    <small>Registered platform users</small>
+                </div>
+
+                <div class="admin-stat-card">
+                    <div class="admin-stat-header">
+                        <span>Total Vehicles</span>
+                        <div class="admin-stat-icon purple">
+                            <i class="bi bi-car-front-fill"></i>
+                        </div>
+                    </div>
+                    <h2>{{ total_vehicles|default:0 }}</h2>
+                    <small>Vehicle listings</small>
+                </div>
+
+                <div class="admin-stat-card">
+                    <div class="admin-stat-header">
+                        <span>Pending Approvals</span>
+                        <div class="admin-stat-icon orange">
+                            <i class="bi bi-hourglass-split"></i>
+                        </div>
+                    </div>
+                    <h2>{{ pending_vehicles|default:0 }}</h2>
+                    <small>Listings awaiting review</small>
+                </div>
+
+                <div class="admin-stat-card">
+                    <div class="admin-stat-header">
+                        <span>Total Bookings</span>
+                        <div class="admin-stat-icon green">
+                            <i class="bi bi-calendar-check-fill"></i>
+                        </div>
+                    </div>
+                    <h2>{{ total_bookings|default:0 }}</h2>
+                    <small>Platform booking records</small>
+                </div>
+
+            </div>
+
+
+            <!-- REVENUE -->
+            <div class="revenue-banner" id="reports">
+
+                <div class="revenue-content">
+                    <span>PLATFORM REVENUE</span>
+                    <h2>Rs. {{ total_revenue|default:0 }}</h2>
+                    <p>Total successfully verified payments</p>
+                </div>
+
+                <div class="revenue-icon">
+                    <i class="bi bi-graph-up-arrow"></i>
+                </div>
+
+            </div>
+
+
+            <!-- QUICK ACTIONS -->
+            <div class="admin-section-heading">
+                <div>
+                    <h4>Management Shortcuts</h4>
+                    <p>Quick access to important platform operations.</p>
+                </div>
+            </div>
+
+            <div class="admin-actions">
+
+                <a href="#users" class="admin-action-card">
+                    <div class="admin-action-icon blue">
+                        <i class="bi bi-person-lines-fill"></i>
+                    </div>
+                    <h6>Manage Users</h6>
+                    <p>View and manage customer and owner accounts.</p>
+                    <i class="bi bi-arrow-up-right action-arrow"></i>
+                </a>
+
+                <a href="#vehicles" class="admin-action-card">
+                    <div class="admin-action-icon orange">
+                        <i class="bi bi-car-front"></i>
+                    </div>
+                    <h6>Vehicle Approvals</h6>
+                    <p>Review and approve vehicle listings.</p>
+                    <i class="bi bi-arrow-up-right action-arrow"></i>
+                </a>
+
+                <a href="#bookings" class="admin-action-card">
+                    <div class="admin-action-icon green">
+                        <i class="bi bi-calendar2-check"></i>
+                    </div>
+                    <h6>Manage Bookings</h6>
+                    <p>Monitor all rental transactions.</p>
+                    <i class="bi bi-arrow-up-right action-arrow"></i>
+                </a>
+
+            </div>
+
+
+            <!-- PENDING VEHICLES -->
+            <div class="admin-section-heading" id="vehicles">
+
+                <div>
+                    <h4>Vehicle Approval Requests</h4>
+                    <p>Review recently submitted vehicle listings.</p>
+                </div>
+
+                <a href="/admin/" class="admin-view-all">
+                    Admin Panel <i class="bi bi-arrow-right"></i>
+                </a>
+
+            </div>
+
+            <div class="admin-table-card">
+
+                <div class="table-responsive">
+
+                    <table class="table align-middle">
+
+                        <thead>
+                            <tr>
+                                <th>Vehicle</th>
+                                <th>Owner</th>
+                                <th>Vehicle Type</th>
+                                <th>Rental Price</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            {% for vehicle in recent_pending_vehicles %}
+
+                            <tr>
+
+                                <td>
+                                    <strong>{{ vehicle }}</strong>
+                                </td>
+
+                                <td>{{ vehicle.owner.username }}</td>
+
+                                <td>{{ vehicle.vehicle_type }}</td>
+
+                                <td>Rs. {{ vehicle.price_per_day }}</td>
+
+                                <td>
+                                    <span class="approval-status pending">
+                                        Pending
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <a href="/admin/" class="review-btn">
+                                        Review
+                                    </a>
+                                </td>
+
+                            </tr>
+
+                            {% empty %}
+
+                            <tr>
+                                <td colspan="6" class="admin-empty">
+                                    <i class="bi bi-check-circle"></i>
+                                    <h6>No pending vehicle approvals</h6>
+                                    <p>New vehicle submissions will appear here.</p>
+                                </td>
+                            </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+
+            <!-- RECENT USERS -->
+            <div class="admin-section-heading users-heading" id="users">
+                <div>
+                    <h4>Recently Registered Users</h4>
+                    <p>Latest accounts registered on RentRide.</p>
+                </div>
+            </div>
+
+            <div class="admin-table-card">
+
+                <div class="table-responsive">
+
+                    <table class="table align-middle">
+
+                        <thead>
+                            <tr>
+                                <th>Username</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Joined Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            {% for member in recent_users %}
+
+                            <tr>
+                                <td><strong>{{ member.username }}</strong></td>
+
+                                <td>{{ member.email }}</td>
+
+                                <td>
+                                    <span class="role-badge {{ member.role }}">
+                                        {{ member.get_role_display }}
+                                    </span>
+                                </td>
+
+                                <td>{{ member.date_joined|date:"M d, Y" }}</td>
+
+                                <td>
+                                    {% if member.is_active %}
+                                        <span class="user-active">Active</span>
+                                    {% else %}
+                                        <span class="user-inactive">Inactive</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+
+                            {% empty %}
+
+                            <tr>
+                                <td colspan="5" class="admin-empty">
+                                    No registered users found.
+                                </td>
+                            </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+
+            <!-- FOOTER -->
+            <footer class="admin-footer">
+                <span>© {% now "Y" %} RentRide Administration.</span>
+                <span>Secure Marketplace Management</span>
+            </footer>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<script>
+    const adminMenuToggle = document.getElementById('adminMenuToggle');
+    const adminSidebar = document.getElementById('adminSidebar');
+
+    adminMenuToggle.addEventListener('click', () => {
+        adminSidebar.classList.toggle('admin-sidebar-open');
+    });
+</script>
+
+</body>
+</html>

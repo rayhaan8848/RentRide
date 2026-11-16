@@ -1,11 +1,13 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}RideNepal | Explore Nepal{% endblock %}
+{% block title %}RentRide | Explore Nepal{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
+{% endblock %}
 
 {% block content %}
-
-<link rel="stylesheet" href="{% static 'css/home.css' %}">
 
 <!-- HERO SECTION -->
 <section class="hero-section">
@@ -20,7 +22,7 @@
             <h1>
                 Explore Nepal.<br>
                 Your Journey,
-                <span>Our Ride.</span>
+                <span>your way.</span>
             </h1>
 
             <p>
@@ -30,64 +32,53 @@
 
             <div class="hero-buttons">
                 <a href="#vehicles" class="primary-btn">
-                    Explore Vehicles <i class="fa-solid fa-arrow-right"></i>
+                    Explore Vehicles <i class="bi bi-arrow-right"></i>
                 </a>
             </div>
         </div>
 
-        <!-- HERO BOOKING FORM -->
+        <!-- FLEET SEARCH -->
         <div class="booking-card">
 
             <div class="booking-heading">
-                <i class="fa-regular fa-calendar-check"></i>
-                <h2>Find Your Perfect Ride</h2>
+                <i class="bi bi-search"></i>
+                <h2>Find your ride</h2>
             </div>
 
-            <form action="#" method="GET" class="booking-form">
+            <form action="#vehicles" method="GET" class="booking-form" id="vehicleSearchForm">
 
                 <div class="form-group">
-                    <label for="location">Pickup Location</label>
-                    <select name="location" id="location" required>
-                        <option value="Kathmandu">Kathmandu</option>
-                        <option value="Lalitpur">Lalitpur</option>
-                        <option value="Bhaktapur">Bhaktapur</option>
-                        <option value="Pokhara">Pokhara</option>
-                        <option value="Chitwan">Chitwan</option>
+                    <label for="vehicleQuery">Vehicle or brand</label>
+                    <input type="search" name="q" id="vehicleQuery"
+                           placeholder="e.g. SUV, Toyota">
+                </div>
+
+                <div class="form-group">
+                    <label for="vehicleCategory">Vehicle type</label>
+                    <select name="category" id="vehicleCategory">
+                        <option value="">All vehicle types</option>
+                        {% for category in categories %}
+                            <option value="{{ category.id }}">{{ category.name }}</option>
+                        {% endfor %}
                     </select>
                 </div>
 
                 <div class="form-group">
-                    <label for="vehicle">Vehicle Type</label>
-                    <select name="vehicle" id="vehicle" required>
-                        <option value="">All Vehicles</option>
-                        <option value="car">Cars</option>
-                        <option value="bike">Motorcycles</option>
-                        <option value="jeep">Jeeps & SUVs</option>
-                        <option value="microbus">Microbuses</option>
-                        <option value="bus">Buses</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="pickup">Pickup Date</label>
-                    <input type="date" id="pickup" name="pickup" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="return">Return Date</label>
-                    <input type="date" id="return" name="return" required>
+                    <label for="maxPrice">Maximum daily rate</label>
+                    <input type="number" name="max_price" id="maxPrice"
+                           min="0" step="any" placeholder="Any budget">
                 </div>
 
                 <button type="submit" class="search-btn">
-                    Search Vehicles
-                    <i class="fa-solid fa-arrow-right"></i>
+                    Search available rides
+                    <i class="bi bi-arrow-right"></i>
                 </button>
 
             </form>
 
             <div class="booking-security">
-                <i class="fa-solid fa-shield-halved"></i>
-                Safe · Reliable · Affordable
+                <i class="bi bi-shield-check"></i>
+                Only currently available vehicles
             </div>
 
         </div>
@@ -97,7 +88,7 @@
 
 
 <!-- BENEFITS SECTION -->
-<section class="benefits-section">
+<section class="benefits-section" id="why-rentride">
 
     <div class="benefits-heading">
         <span class="section-tag">WHY RENT RIDE</span>
@@ -154,38 +145,68 @@
                 vehicle for every journey.
             </p>
 
-            <a href="#" class="outline-btn">
-                View All Vehicles
-                <i class="fa-solid fa-arrow-right"></i>
+            <a href="#vehicleSearchForm" class="outline-btn">
+                Refine your search
+                <i class="bi bi-arrow-right"></i>
             </a>
+            <p class="vehicle-results-count" id="vehicleResultsCount" aria-live="polite">
+                {{ vehicles|length }} ride{{ vehicles|length|pluralize }} available
+            </p>
         </div>
 
 
         <div class="vehicle-grid">
 
             {% for vehicle in vehicles %}
-                <div class="vehicle-card">
+                <article class="vehicle-card"
+                         data-vehicle-card
+                         data-name="{{ vehicle.name|lower }}"
+                         data-brand="{{ vehicle.brand|lower }}"
+                         data-category-name="{{ vehicle.category.name|lower }}"
+                         data-category="{{ vehicle.category_id }}"
+                         data-price="{{ vehicle.daily_price }}">
                     <div class="vehicle-image">
-                        <img src="{{ vehicle.main_image.url }}" alt="{{ vehicle.name }}">
+                        {% if vehicle.main_image %}
+                            <img src="{{ vehicle.main_image.url }}" alt="{{ vehicle.name }}" loading="lazy">
+                        {% else %}
+                            <div class="vehicle-image-placeholder" aria-hidden="true">
+                                <i class="bi bi-car-front-fill"></i>
+                            </div>
+                        {% endif %}
                         <span class="vehicle-badge">{{ vehicle.category.name }}</span>
                     </div>
 
                     <div class="vehicle-info">
+                        <p class="vehicle-brand">{{ vehicle.brand }} · {{ vehicle.model_year }}</p>
                         <h3>{{ vehicle.name }}</h3>
-                        <div class="vehicle-price">Rs. {{ vehicle.daily_price }} <small>/ day</small></div>
+                        <div class="vehicle-price">Rs. {{ vehicle.daily_price|floatformat:0 }} <small>/ day</small></div>
 
                         <div class="vehicle-details">
-                            <span><i class="fa-solid fa-users"></i> {{ vehicle.seats }} Seats</span>
-                            <span><i class="fa-solid fa-gear"></i> {{ vehicle.get_transmission_display }}</span>
+                            <span><i class="bi bi-people-fill"></i> {{ vehicle.seats }} Seats</span>
+                            <span><i class="bi bi-gear-fill"></i> {{ vehicle.get_transmission_display }}</span>
                         </div>
 
-                        <a href="#" class="book-btn">Book Now <i class="fa-solid fa-arrow-right"></i></a>
+                        <a href="{% url 'signup' %}" class="book-btn">
+                            Get started <i class="bi bi-arrow-right"></i>
+                        </a>
                     </div>
-                </div>
+                </article>
             {% empty %}
-                <p>No vehicles are currently available.</p>
+                <div class="vehicle-empty-state">
+                    <i class="bi bi-car-front-fill" aria-hidden="true"></i>
+                    <h3>No rides available just yet</h3>
+                    <p>Please check back soon for new listings.</p>
+                </div>
             {% endfor %}
 
+            {% if vehicles %}
+                <div class="vehicle-empty-state vehicle-filter-empty" id="vehicleFilterEmpty" hidden>
+                    <i class="bi bi-search" aria-hidden="true"></i>
+                    <h3>No matching rides</h3>
+                    <p>Try a different search or clear your filters.</p>
+                    <button type="button" class="outline-btn" id="clearVehicleFilters">Clear filters</button>
+                </div>
+            {% endif %}
         </div>
     </div>
 </section>
@@ -205,7 +226,7 @@
 
             <a href="#destinations" class="outline-btn">
                 Explore Destinations
-                <i class="fa-solid fa-arrow-right"></i>
+                <i class="bi bi-arrow-right"></i>
             </a>
         </div>
 
@@ -218,7 +239,7 @@
                         <img src="{{ location.image.url }}" alt="{{ location.name }}">
                     {% endif %}
                     <div class="destination-name">
-                        <i class="fa-solid fa-location-dot"></i> {{ location.name }}
+                        <i class="bi bi-geo-alt-fill"></i> {{ location.name }}
                         <small>{{ location.district }}</small>
                     </div>
                 </div>
@@ -235,15 +256,15 @@
 <section class="cta-section">
 
     <div class="cta-content">
-        <i class="fa-solid fa-car-side"></i>
+        <i class="bi bi-car-front-fill"></i>
 
         <div>
             <h2>Ready for Your Next Journey?</h2>
-            <p>Book your ride today and experience the best of Nepal.</p>
+            <p>Compare available rides and start planning your next trip.</p>
         </div>
 
-        <a href="#" class="cta-btn">
-            Book a Ride <i class="fa-solid fa-arrow-right"></i>
+        <a href="#vehicles" class="cta-btn">
+            Explore available rides <i class="bi bi-arrow-right"></i>
         </a>
     </div>
 

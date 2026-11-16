@@ -1,4 +1,3 @@
-
 /* =========================================
    RENTRIDE AUTHENTICATION PAGE
 ========================================= */
@@ -29,12 +28,10 @@ body {
     min-height: 100vh;
     width: 100%;
     background:
-        linear-gradient(
-            110deg,
+        linear-gradient(110deg,
             rgba(7, 27, 55, 0.35),
             rgba(7, 30, 60, 0.12),
-            rgba(7, 27, 55, 0.25)
-        ),
+            rgba(7, 27, 55, 0.25)),
         url("../images/background.png");
 
     background-size: cover;
@@ -184,11 +181,9 @@ body {
     justify-content: center;
     pointer-events: none;
 
-    background: linear-gradient(
-        to top,
-        rgba(0, 0, 0, 0.35),
-        transparent 60%
-    );
+    background: linear-gradient(to top,
+            rgba(0, 0, 0, 0.35),
+            transparent 60%);
 }
 
 .video-overlay span {
@@ -259,7 +254,7 @@ body {
 
 /* HIDE RADIO BUTTONS */
 
-.auth-card > input[type="radio"] {
+.auth-card>input[type="radio"] {
     display: none;
 }
 
@@ -293,8 +288,8 @@ body {
 
 /* ACTIVE TAB */
 
-#login-tab:checked ~ .tab-buttons .login-label,
-#signup-tab:checked ~ .tab-buttons .signup-label {
+#login-tab:checked~.tab-buttons .login-label,
+#signup-tab:checked~.tab-buttons .signup-label {
     background: var(--primary);
     color: white;
     box-shadow: 0 5px 15px rgba(8, 124, 255, 0.25);
@@ -307,11 +302,11 @@ body {
     animation: fadeIn 0.35s ease;
 }
 
-#login-tab:checked ~ .login-content {
+#login-tab:checked~.login-content {
     display: block;
 }
 
-#signup-tab:checked ~ .signup-content {
+#signup-tab:checked~.signup-content {
     display: block;
 }
 
@@ -320,6 +315,7 @@ body {
         opacity: 0;
         transform: translateY(12px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -431,11 +427,9 @@ body {
     border: none;
     border-radius: 30px;
 
-    background: linear-gradient(
-        120deg,
-        #087cff,
-        #0062dc
-    );
+    background: linear-gradient(120deg,
+            #087cff,
+            #0062dc);
 
     color: white;
     font-size: 15px;
@@ -606,4 +600,152 @@ body {
     .tab-btn {
         font-size: 13px;
     }
+}
+
+.auth-wrapper {
+    background:
+        linear-gradient(110deg, rgba(7, 27, 55, .82), rgba(7, 30, 60, .46), rgba(7, 27, 55, .72)),
+        url("../images/background.png") center / cover no-repeat;
+}
+
+.travel-tag {
+    color: #a9edff;
+}
+
+.travel-content h1 span {
+    color: #21d4c2;
+}
+
+.auth-card {
+    position: relative;
+    background: rgba(248, 252, 255, .94);
+    border-color: rgba(255, 255, 255, .82);
+    box-shadow: 0 24px 70px rgba(0, 20, 42, .32);
+}
+
+.auth-card:focus-within {
+    box-shadow: 0 24px 70px rgba(0, 20, 42, .32), 0 0 0 3px rgba(33, 212, 194, .18);
+}
+
+.input-group-custom input {
+    flex: 1;
+    min-width: 0;
+}
+
+.password-toggle {
+    display: grid;
+    width: 34px;
+    height: 34px;
+    flex: 0 0 34px;
+    place-items: center;
+    border: 0;
+    border-radius: 9px;
+    color: #50627f;
+    background: transparent;
+    cursor: pointer;
+    transition: color .2s ease, background-color .2s ease;
+}
+
+.password-toggle:hover,
+.password-toggle:focus-visible {
+    color: var(--primary-dark);
+    background: rgba(8, 124, 255, .09);
+}
+
+.password-toggle:focus-visible,
+.tab-btn:focus-visible,
+.submit-btn:focus-visible,
+.home-link:focus-visible {
+    outline: 3px solid rgba(33, 212, 194, .72);
+    outline-offset: 3px;
+}
+
+.messages-container {
+    display: grid;
+    gap: 9px;
+    margin-bottom: 18px;
+}
+
+.auth-message {
+    padding: 11px 13px;
+    border: 1px solid transparent;
+    border-radius: 11px;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.auth-message-success {
+    color: #155e38;
+    border-color: #b6e4c9;
+    background: #eaf8ef;
+}
+
+.auth-message-error {
+    color: #8a2630;
+    border-color: #efc0c4;
+    background: #fff0f1;
+}
+
+.auth-message-info,
+.auth-message-warning {
+    color: #235477;
+    border-color: #c3dff1;
+    background: #edf7fc;
+}
+
+.auth-card>input[type="radio"] {
+    display: block;
+    position: absolute;
+    clip-path: inset(50%);
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    padding: 0;
+    border: 0;
+    margin: -1px;
+    white-space: nowrap;
+}
+
+#login-tab:focus-visible~.tab-buttons .login-label,
+#signup-tab:focus-visible~.tab-buttons .signup-label {
+    outline: 3px solid rgba(33, 212, 194, .72);
+    outline-offset: 3px;
+}
+
+@media (max-width: 768px) {
+    .video-container {
+        height: 170px;
+        max-width: 480px;
+    }
+
+    .travel-features {
+        margin-top: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .auth-card {
+        padding: 20px 16px;
+    }
+
+    .input-group-custom {
+        padding-inline: 12px;
+    }
+}
+
+.input-group-custom select {
+    width: 100%;
+    border: none;
+    outline: none;
+    background: transparent;
+    color: inherit;
+    font-family: inherit;
+    font-size: inherit;
+    cursor: pointer;
+}
+
+.input-group-custom select option {
+    background: #ffffff;
+    color: #222222;
 }

@@ -6,9 +6,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>{% block title %}RideNepal | Explore Nepal Your Way{% endblock %}</title>
+    <title>{% block title %}RentRide | Explore Nepal Your Way{% endblock %}</title>
 
-    <meta name="description" content="Discover Nepal with RideNepal. Rent bikes, cars, jeeps, microbuses and buses easily.">
+    <meta name="description" content="Discover Nepal with RentRide. Find available cars, motorcycles and more for your next journey.">
 
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -40,7 +40,7 @@
             <div class="container">
 
                 <!-- Brand -->
-                <a class="navbar-brand" href="/" aria-label="RideNepal home">
+                <a class="navbar-brand" href="/" aria-label="RentRide home">
                     <img class="brand-logo" src="{% static 'images/logo2.png' %}" alt="Rent Ride">
                 </a>
 
@@ -73,8 +73,8 @@
                         </li>
 
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle {% if request.path == '/vehicles/' %}active{% endif %}"
-                               href="/vehicles/"
+                            <a class="nav-link dropdown-toggle {% if request.path == '/' %}active{% endif %}"
+                               href="{% url 'home' %}#vehicles"
                                id="vehiclesDropdown"
                                role="button"
                                data-bs-toggle="dropdown"
@@ -83,30 +83,24 @@
                                 Vehicles
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="vehiclesDropdown">
-                                <li><a class="dropdown-item" href="/vehicles/">Browse all vehicles</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="/vehicles/?type=bike">Motorcycles</a></li>
-                                <li><a class="dropdown-item" href="/vehicles/?type=car">Cars</a></li>
-                                <li><a class="dropdown-item" href="/vehicles/?type=jeep">Jeeps &amp; SUVs</a></li>
-                                <li><a class="dropdown-item" href="/vehicles/?type=microbus">Microbuses</a></li>
-                                <li><a class="dropdown-item" href="/vehicles/?type=bus">Buses</a></li>
+                                <li><a class="dropdown-item" href="{% url 'home' %}#vehicles">Browse available vehicles</a></li>
                             </ul>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link {% if request.path == '/about/' %}active{% endif %}" href="/about/">
+                            <a class="nav-link" href="{% url 'home' %}#why-rentride">
                                 About Us
                             </a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link {% if request.path == '/pricing/' %}active{% endif %}" href="/pricing/">
+                            <a class="nav-link" href="{% url 'home' %}#vehicles">
                                 Pricing
                             </a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link {% if request.path == '/contact/' %}active{% endif %}" href="/contact/">
+                            <a class="nav-link" href="{% url 'home' %}#contact">
                                 Contact
                             </a>
                         </li>
@@ -116,14 +110,45 @@
                     <!-- Account and CTA -->
                     <div class="navbar-actions d-flex align-items-center gap-3 flex-column flex-lg-row">
 
-                        <a href="{% url "signup" %}"
-                           class="nav-login {% if request.path == '/login/' %}active{% endif %}">
-                            <i class="bi bi-person-circle me-1"></i>
-                            Login
-                        </a>
+                        {% if request.user.is_authenticated %}
+                            {% if request.user.role == 'owner' %}
+                                <a href="{% url 'owner_dashboard' %}" class="nav-login nav-account">
+                            {% elif request.user.role == 'customer' %}
+                                <a href="{% url 'customer_dashboard' %}" class="nav-login nav-account">
+                            {% else %}
+                                <a href="{% url 'admin_dashboard' %}" class="nav-login nav-account">
+                            {% endif %}
+                                {% if request.user.profile_image %}
+                                    <img class="nav-profile-image"
+                                         src="{{ request.user.profile_image.url }}"
+                                         alt="Profile picture">
+                                {% else %}
+                                    <span class="nav-profile-fallback" aria-hidden="true">
+                                        {{ request.user.fullname|default:request.user.username|first|upper }}
+                                    </span>
+                                {% endif %}
+                                <span>{{ request.user.fullname|default:request.user.username }}</span>
+                            </a>
+                        {% else %}
+                            <a href="{% url 'signup' %}"
+                               class="nav-login {% if request.path == '/login/' %}active{% endif %}">
+                                <i class="bi bi-person-circle me-1"></i>
+                                Login / Sign up
+                            </a>
+                        {% endif %}
 
-                        <a href="/vehicles/" class="nav-cta">
-                            Book a Ride
+                        {% if request.user.is_authenticated %}
+                            <form action="{% url 'logout' %}" method="post" class="logout-form">
+                                {% csrf_token %}
+                                <button type="submit" class="nav-login logout-button">
+                                    <i class="bi bi-box-arrow-right me-1"></i>
+                                    Log out
+                                </button>
+                            </form>
+                        {% endif %}
+
+                        <a href="{% url 'home' %}#vehicles" class="nav-cta">
+                            Find a Ride
                             <i class="bi bi-arrow-up-right"></i>
                         </a>
 
@@ -151,7 +176,7 @@
          FOOTER
     ========================== -->
 
-    <footer class="main-footer">
+    <footer class="main-footer" id="contact">
 
         <div class="container">
 
@@ -162,7 +187,7 @@
 
                     <a href="/" class="footer-brand">
                         <i class="bi bi-car-front-fill footer-highlight"></i>
-                        Ride<span>Nepal</span>
+                        Rent<span>Ride</span>
                     </a>
 
                     <p class="footer-description">
@@ -172,26 +197,6 @@
                         services. Wherever you want to go, we take
                         you there.
                     </p>
-
-                    <div class="footer-socials">
-
-                        <a href="#" aria-label="Facebook">
-                            <i class="bi bi-facebook"></i>
-                        </a>
-
-                        <a href="#" aria-label="Instagram">
-                            <i class="bi bi-instagram"></i>
-                        </a>
-
-                        <a href="#" aria-label="TikTok">
-                            <i class="bi bi-tiktok"></i>
-                        </a>
-
-                        <a href="#" aria-label="YouTube">
-                            <i class="bi bi-youtube"></i>
-                        </a>
-
-                    </div>
 
                 </div>
 
@@ -204,10 +209,10 @@
                     <ul class="footer-links">
 
                         <li><a href="/">Home</a></li>
-                        <li><a href="/vehicles/">Our Vehicles</a></li>
-                        <li><a href="/about/">About Us</a></li>
-                        <li><a href="/pricing/">Pricing</a></li>
-                        <li><a href="/contact/">Contact</a></li>
+                        <li><a href="{% url 'home' %}#vehicles">Our Vehicles</a></li>
+                        <li><a href="{% url 'home' %}#why-rentride">About Us</a></li>
+                        <li><a href="{% url 'home' %}#vehicles">Pricing</a></li>
+                        <li><a href="{% url 'home' %}#contact">Contact</a></li>
 
                     </ul>
 
@@ -221,11 +226,7 @@
 
                     <ul class="footer-links">
 
-                        <li><a href="/vehicles/?type=bike">Motorcycles</a></li>
-                        <li><a href="/vehicles/?type=car">Cars</a></li>
-                        <li><a href="/vehicles/?type=jeep">Jeeps & SUVs</a></li>
-                        <li><a href="/vehicles/?type=microbus">Microbuses</a></li>
-                        <li><a href="/vehicles/?type=bus">Buses</a></li>
+                        <li><a href="{% url 'home' %}#vehicles">Browse available rides</a></li>
 
                     </ul>
 
@@ -235,7 +236,7 @@
                 <!-- Contact -->
                 <div class="col-lg-4 col-md-6">
 
-                    <h5 class="footer-title">Get In Touch</h5>
+                    <h5 class="footer-title">Get Started</h5>
 
                     <div class="footer-contact">
                         <i class="bi bi-geo-alt-fill"></i>
@@ -243,18 +244,8 @@
                     </div>
 
                     <div class="footer-contact">
-                        <i class="bi bi-telephone-fill"></i>
-                        <span>+977 98XXXXXXXX</span>
-                    </div>
-
-                    <div class="footer-contact">
-                        <i class="bi bi-envelope-fill"></i>
-                        <span>info@ridenepal.com</span>
-                    </div>
-
-                    <div class="footer-contact">
-                        <i class="bi bi-clock-fill"></i>
-                        <span>Available 24/7 for your journey</span>
+                        <i class="bi bi-person-plus-fill"></i>
+                        <a href="{% url 'signup' %}">Create your RentRide account</a>
                     </div>
 
                     <!-- Newsletter -->
@@ -307,9 +298,7 @@
 
                     <div class="col-md-6 text-md-end text-end">
 
-                        <a href="/privacy/">Privacy Policy</a>
-
-                        <a href="/terms/">Terms & Conditions</a>
+                        <span>Ride with confidence across Nepal.</span>
 
                     </div>
 

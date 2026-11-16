@@ -1,6 +1,3 @@
-from django.db import models
-
-# Create your models here.
 
 from django.db import models
 from django.contrib.auth.models import AbstractUser
@@ -9,15 +6,65 @@ from cloudinary.models import CloudinaryField
 
 class User(AbstractUser):
 
-    fullname=models.CharField(max_length=50, blank=True)
-    email = models.EmailField(unique=True)
+    # ==================================
+    # USER ROLES
+    # ==================================
 
-    phone = models.CharField(max_length=15, blank=True)
+    class Role(models.TextChoices):
 
-    profile_image = CloudinaryField("images")
+        CUSTOMER = "customer", "Customer"
+        OWNER = "owner", "Vehicle Owner"
+        ADMIN = "admin", "Admin"
 
-    address = models.TextField(blank=True)
+
+    # ==================================
+    # BASIC INFORMATION
+    # ==================================
+
+    fullname = models.CharField(
+        max_length=50,
+        blank=True
+    )
+
+    email = models.EmailField(
+        unique=True
+    )
+
+    phone = models.CharField(
+        max_length=15,
+        blank=True
+    )
+
+
+    # ==================================
+    # PROFILE INFORMATION
+    # ==================================
+
+    profile_image = CloudinaryField(
+        "images",
+        blank=True,
+        null=True
+    )
+
+    address = models.TextField(
+        blank=True
+    )
+
+
+    # ==================================
+    # ROLE MANAGEMENT
+    # ==================================
+
+    role = models.CharField(
+        max_length=10,
+        choices=Role.choices,
+        default=Role.CUSTOMER
+    )
+
+
+    # ==================================
+    # STRING REPRESENTATION
+    # ==================================
 
     def __str__(self):
-        return self.username
-
+        return f"{self.username} ({self.get_role_display()})"

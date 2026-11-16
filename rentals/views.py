@@ -16,4 +16,4 @@ def home(request):
         'vehicles': vehicles,
     }
 
-    return render(request, 'home.html', context)
+    return render(request, 'main/home.html', context)
