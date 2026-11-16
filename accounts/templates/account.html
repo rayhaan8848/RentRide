@@ -1,0 +1,298 @@
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>RentRide | Login & Signup</title>
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/account.css' %}">
+</head>
+
+<body>
+
+<div class="auth-wrapper">
+
+    <!-- TOP NAVIGATION -->
+    <nav class="top-navbar">
+        <a href="/" class="brand">
+            <i class="bi bi-car-front-fill"></i>
+            Rent<span>Ride</span>
+        </a>
+
+        <a href="{% url "home" %}" class="home-link">
+            <i class="bi bi-house-door-fill"></i>
+            Back to Home
+        </a>
+    </nav>
+
+
+    <main class="auth-container">
+
+        <!-- LEFT SECTION -->
+        <section class="travel-section">
+
+            <div class="travel-content">
+
+                <div class="travel-tag">
+                    EXPLORE <span>•</span> RENT <span>•</span> TRAVEL
+                </div>
+
+                <h1>
+                    Your Next Journey
+                    <span>Starts Here.</span>
+                </h1>
+
+                <p class="travel-description">
+                    Discover freedom on every road.
+                    Find your perfect ride and explore Nepal
+                    with RentRide.
+                </p>
+
+                <!-- VIDEO CONTAINER -->
+                <div class="video-container">
+
+                    <video autoplay muted loop playsinline>
+                        <source src="{% static 'videos/ok.mp4' %}"
+                                type="video/mp4">
+                        Your browser does not support video.
+                    </video>
+
+                    <div class="video-overlay">
+                        <span>
+                            <i class="bi bi-play-circle-fill"></i>
+                            EXPLORE THE JOURNEY
+                        </span>
+                    </div>
+
+                </div>
+
+                <!-- FEATURES -->
+                <div class="travel-features">
+
+                    <div class="feature">
+                        <i class="bi bi-shield-check"></i>
+                        <span>Safe & Secure</span>
+                    </div>
+
+                    <div class="feature">
+                        <i class="bi bi-car-front-fill"></i>
+                        <span>Wide Range</span>
+                    </div>
+
+                    <div class="feature">
+                        <i class="bi bi-headset"></i>
+                        <span>24/7 Support</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- RIGHT SECTION -->
+        <section class="form-section">
+
+            <div class="auth-card">
+
+                <!-- TAB CONTROLS -->
+                <input type="radio" name="auth-tab"
+                       id="login-tab" {% if not signup_active %}checked{% endif %}>
+
+                <input type="radio" name="auth-tab"
+                       id="signup-tab" {% if signup_active %}checked{% endif %}>
+
+                <div class="tab-buttons">
+
+                    <label for="login-tab" class="tab-btn login-label">
+                        <i class="bi bi-person-fill"></i>
+                        Login
+                    </label>
+
+                    <label for="signup-tab" class="tab-btn signup-label">
+                        <i class="bi bi-person-plus-fill"></i>
+                        Sign Up
+                    </label>
+
+                </div>
+
+
+                <!-- LOGIN FORM -->
+                <div class="form-content login-content">
+
+                    <div class="form-heading">
+                        <h2>Welcome Back!</h2>
+                        <p>Login to continue your journey with RentRide.</p>
+                    </div>
+
+                    <form  method="POST" action="{% url 'log_in' %}" >
+
+                        {% csrf_token %}
+
+                        <div class="input-group-custom">
+                            <i class="bi bi-envelope"></i>
+
+                            <input type="text"
+                                   name="username"
+                                   placeholder="username"
+                                   required>
+                        </div>
+
+                        <div class="input-group-custom">
+                            <i class="bi bi-lock"></i>
+
+                            <input type="password"
+                                   name="password"
+                                   placeholder="Password"
+                                   required>
+                        </div>
+
+                        <div class="form-options">
+
+                            <label class="remember">
+                                <input type="checkbox" name="remember">
+                                Remember Me
+                            </label>
+
+                            <a href="#">Forgot Password?</a>
+
+                        </div>
+
+                        <button type="submit" class="submit-btn">
+                            <i class="bi bi-box-arrow-in-right"></i>
+                            Login
+                        </button>
+
+                    </form>
+
+                    <div class="form-footer">
+                        Don't have an account?
+                        <label for="signup-tab">Sign Up</label>
+                    </div>
+
+                </div>
+
+
+                <!-- SIGNUP FORM -->
+                <div class="form-content signup-content">
+
+                    <div class="form-heading">
+                        <h2>Create Account!</h2>
+                        <p>Join RentRide and start your next adventure.</p>
+                    </div>
+
+                    <form  method="POST" action="{% url 'signup' %}">
+
+                        {% csrf_token %}
+
+                        <div class="input-group-custom">
+                            <i class="bi bi-person"></i>
+
+                            <input type="text"
+                                   name="fullname"
+                                   placeholder="Full Name"
+                                   required>
+                        </div>
+                        <div class="input-group-custom">
+                            <i class="bi bi-person"></i>
+
+                            <input type="text"
+                                   name="username"
+                                   placeholder="Username"
+                                   required>
+                        </div>
+
+                        <div class="input-group-custom">
+                            <i class="bi bi-envelope"></i>
+
+                            <input type="email"
+                                   name="email"
+                                   placeholder="Email Address"
+                                   required>
+                        </div>
+
+                        <div class="input-group-custom">
+                            <i class="bi bi-telephone"></i>
+
+                            <input type="tel"
+                                   name="phone"
+                                   placeholder="Phone Number"
+                                   required>
+                        </div>
+
+                        <div class="input-group-custom">
+                            <i class="bi bi-lock"></i>
+
+                            <input type="password"
+                                   name="password"
+                                   placeholder="Create Password"
+                                   required>
+                        </div>
+
+                        <div class="input-group-custom">
+                            <i class="bi bi-shield-lock"></i>
+
+                            <input type="password"
+                                   name="cpassword"
+                                   placeholder="Confirm Password"
+                                   required>
+                        </div>
+
+                        <button type="submit" class="submit-btn">
+                            <i class="bi bi-person-plus-fill"></i>
+                            Create Account
+                        </button>
+
+                    </form>
+
+                    <div class="form-footer">
+                        Already have an account?
+                        <label for="login-tab">Login</label>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+{% if messages %}
+    <div class="messages-container">
+        {% for message in messages %}
+            <div class="alert alert-info alert-dismissible fade show">
+                {{ message }}
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="alert">
+                </button>
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+
+</body>
+</html>
