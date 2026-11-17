@@ -1,5 +1,8 @@
+
 from django.db import models
+from django.conf import settings
 from cloudinary.models import CloudinaryField
+
 
 # Vehicle Categories
 class Category(models.Model):
@@ -15,8 +18,6 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
-
-# Pickup and Return Locations
 
 # Pickup and Return Locations
 class Location(models.Model):
@@ -43,15 +44,22 @@ class Location(models.Model):
         return f"{self.name}, {self.district}"
 
 
-
 # Vehicle Details
 class Vehicle(models.Model):
 
+    # Vehicle Approval Status
+    class ApprovalStatus(models.TextChoices):
+        PENDING = 'pending', 'Pending'
+        APPROVED = 'approved', 'Approved'
+        REJECTED = 'rejected', 'Rejected'
+
+    # Vehicle Transmission
     TRANSMISSION_CHOICES = [
         ('AUTOMATIC', 'Automatic'),
         ('MANUAL', 'Manual'),
     ]
 
+    # Vehicle Fuel Type
     FUEL_CHOICES = [
         ('PETROL', 'Petrol'),
         ('DIESEL', 'Diesel'),
@@ -59,6 +67,16 @@ class Vehicle(models.Model):
         ('HYBRID', 'Hybrid'),
     ]
 
+    # Vehicle Owner
+    owner = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='vehicles',
+        null=True,
+        blank=True
+    )
+
+    # Vehicle Category
     category = models.ForeignKey(
         Category,
         on_delete=models.PROTECT,
@@ -92,14 +110,22 @@ class Vehicle(models.Model):
 
     main_image = CloudinaryField("images")
 
+    # Vehicle Availability
     is_available = models.BooleanField(default=True)
+
+    # Admin Approval
+    approval_status = models.CharField(
+        max_length=20,
+        choices=ApprovalStatus.choices,
+        default=ApprovalStatus.PENDING
+    )
 
     created_at = models.DateTimeField(auto_now_add=True)
 
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.name
+        return f"{self.brand} {self.name}"
 
 
 # Multiple Images for One Vehicle

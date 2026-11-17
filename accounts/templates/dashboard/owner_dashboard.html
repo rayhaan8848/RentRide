@@ -33,7 +33,7 @@
                 <span>Dashboard</span>
             </a>
 
-            <a href="#vehicles" class="nav-link">
+            <a href="{% url 'my_vehicles' %}" class="nav-link">
                 <i class="bi bi-car-front"></i>
                 <span>My Vehicles</span>
             </a>
@@ -149,7 +149,7 @@
                     <p>Manage your vehicles and keep track of your rental business.</p>
                 </div>
 
-                <a href="#add-vehicle" class="primary-btn">
+                <a href="{% url 'add_vehicle' %}" class="primary-btn">
                     <i class="bi bi-plus-lg"></i> Add New Vehicle
                 </a>
             </div>

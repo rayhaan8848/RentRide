@@ -1,0 +1,441 @@
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>My Vehicles | RentRide</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet">
+
+    <style>
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: #f3f7fc;
+            color: #172b4d;
+        }
+
+        /* Navbar */
+        .navbar {
+            background: rgba(255, 255, 255, 0.72);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border-bottom: 1px solid rgba(255,255,255,0.7);
+            box-shadow: 0 5px 25px rgba(24, 75, 130, 0.06);
+            padding: 16px 0;
+        }
+
+        .navbar-brand {
+            font-weight: 800;
+            font-size: 25px;
+            color: #1769c2;
+        }
+
+        .navbar-brand span {
+            color: #172b4d;
+        }
+
+        .nav-link {
+            font-weight: 600;
+            color: #53677f;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: #1769c2;
+        }
+
+        /* Main Content */
+        .page-header {
+            padding: 45px 0 25px;
+        }
+
+        .page-header h1 {
+            font-size: 30px;
+            font-weight: 800;
+        }
+
+        .page-header p {
+            color: #718096;
+        }
+
+        /* Vehicle Card */
+        .vehicle-card {
+            background: #fff;
+            border: 1px solid #e8eef6;
+            border-radius: 18px;
+            overflow: hidden;
+            transition: 0.3s ease;
+            height: 100%;
+        }
+
+        .vehicle-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(31, 78, 121, 0.10);
+        }
+
+        .vehicle-image {
+            height: 210px;
+            background: #edf3fa;
+            position: relative;
+        }
+
+        .vehicle-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .vehicle-info {
+            padding: 20px;
+        }
+
+        .vehicle-name {
+            font-size: 19px;
+            font-weight: 750;
+            margin-bottom: 5px;
+        }
+
+        .vehicle-category {
+            font-size: 13px;
+            color: #8292a8;
+        }
+
+        .vehicle-price {
+            color: #1769c2;
+            font-size: 20px;
+            font-weight: 800;
+        }
+
+        .vehicle-price small {
+            font-size: 12px;
+            color: #8a9ab0;
+            font-weight: 500;
+        }
+
+        .vehicle-specs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            padding: 15px 0;
+            border-top: 1px solid #edf1f6;
+            border-bottom: 1px solid #edf1f6;
+            margin: 15px 0;
+            color: #65758b;
+            font-size: 12px;
+        }
+
+        /* Status */
+        .status {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 30px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: capitalize;
+        }
+
+        .status-pending {
+            background: #fff4d6;
+            color: #a36b00;
+        }
+
+        .status-approved {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        .status-rejected {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+        .btn-add {
+            background: linear-gradient(135deg, #1673d1, #1453a4);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 11px 20px;
+            font-weight: 600;
+        }
+
+        .btn-add:hover {
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .btn-edit {
+            background: #eaf3ff;
+            color: #1769c2;
+            border: none;
+        }
+
+        .btn-delete {
+            background: #fff0f0;
+            color: #dc3545;
+            border: none;
+        }
+
+        .empty-state {
+            background: white;
+            border-radius: 20px;
+            padding: 70px 20px;
+            text-align: center;
+            border: 1px solid #e8eef6;
+        }
+
+        .empty-icon {
+            font-size: 60px;
+            color: #8db9e9;
+        }
+
+        @media (max-width: 576px) {
+            .page-header h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg sticky-top">
+    <div class="container">
+
+        <a class="navbar-brand" href="{% url 'home' %}">
+            Rent<span>Ride.</span>
+        </a>
+
+        <button class="navbar-toggler" type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarContent">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarContent">
+
+            <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-3">
+
+                <li class="nav-item">
+                    <a class="nav-link"
+                       href="{% url 'owner_dashboard' %}">
+                        Dashboard
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link active"
+                       href="{% url 'my_vehicles' %}">
+                        My Vehicles
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="btn btn-add"
+                       href="{% url 'add_vehicle' %}">
+                        <i class="bi bi-plus-lg"></i>
+                        Add Vehicle
+                    </a>
+                </li>
+
+            </ul>
+
+        </div>
+    </div>
+</nav>
+
+
+<!-- Main -->
+<main class="container">
+
+    <div class="page-header d-flex flex-wrap
+                justify-content-between align-items-center gap-3">
+
+        <div>
+            <h1>My Vehicles</h1>
+
+            <p class="mb-0">
+                Manage your vehicle listings and approval status.
+            </p>
+        </div>
+
+        <a href="{% url 'add_vehicle' %}" class="btn btn-add">
+            <i class="bi bi-plus-circle"></i>
+            Add New Vehicle
+        </a>
+
+    </div>
+
+
+    <!-- Messages -->
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show">
+                {{ message }}
+
+                <button type="button" class="btn-close"
+                        data-bs-dismiss="alert"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+
+    <!-- Vehicle Cards -->
+    <div class="row g-4 pb-5">
+
+        {% for vehicle in vehicles %}
+
+            <div class="col-lg-4 col-md-6">
+
+                <div class="vehicle-card">
+
+                    <div class="vehicle-image">
+
+                        {% if vehicle.main_image %}
+                            <img src="{{ vehicle.main_image.url }}"
+                                 alt="{{ vehicle.name }}">
+                        {% else %}
+                            <div class="d-flex h-100
+                                        justify-content-center
+                                        align-items-center">
+                                <i class="bi bi-car-front fs-1 text-secondary"></i>
+                            </div>
+                        {% endif %}
+
+                    </div>
+
+
+                    <div class="vehicle-info">
+
+                        <div class="d-flex justify-content-between
+                                    align-items-start gap-2">
+
+                            <div>
+                                <h5 class="vehicle-name">
+                                    {{ vehicle.brand }} {{ vehicle.name }}
+                                </h5>
+
+                                <p class="vehicle-category">
+                                    {{ vehicle.category.name }}
+                                    · {{ vehicle.model_year }}
+                                </p>
+                            </div>
+
+                            <span class="status status-{{ vehicle.approval_status }}">
+                                {{ vehicle.get_approval_status_display }}
+                            </span>
+
+                        </div>
+
+
+                        <div class="vehicle-price mt-3">
+                            Rs. {{ vehicle.daily_price }}
+                            <small>/ day</small>
+                        </div>
+
+
+                        <div class="vehicle-specs">
+
+                            <span>
+                                <i class="bi bi-people"></i>
+                                {{ vehicle.seats }} Seats
+                            </span>
+
+                            <span>
+                                <i class="bi bi-gear"></i>
+                                {{ vehicle.get_transmission_display }}
+                            </span>
+
+                            <span>
+                                <i class="bi bi-fuel-pump"></i>
+                                {{ vehicle.get_fuel_type_display }}
+                            </span>
+
+                        </div>
+
+
+                        <div class="d-flex gap-2">
+
+                            <a href="{% url 'edit_vehicle' vehicle.id %}"
+                               class="btn btn-edit flex-fill">
+                                <i class="bi bi-pencil"></i>
+                                Edit
+                            </a>
+
+                            <form method="POST"
+                                action="{% url 'delete_vehicle' vehicle.id %}"
+                                class="flex-fill"
+                                onsubmit="return confirm('Are you sure you want to delete this vehicle? This action cannot be undone.');">
+
+                                {% csrf_token %}
+
+                                <button type="submit"
+                                        class="btn btn-delete w-100">
+
+                                    <i class="bi bi-trash"></i>
+                                    Delete
+
+                                </button>
+
+                            </form>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        {% empty %}
+
+            <div class="col-12">
+
+                <div class="empty-state">
+
+                    <i class="bi bi-car-front empty-icon"></i>
+
+                    <h3 class="fw-bold mt-3">
+                        No Vehicles Added Yet
+                    </h3>
+
+                    <p class="text-muted">
+                        Start listing your vehicles and earn with RentRide.
+                    </p>
+
+                    <a href="{% url 'add_vehicle' %}"
+                       class="btn btn-add mt-3">
+                        <i class="bi bi-plus-circle"></i>
+                        Add Your First Vehicle
+                    </a>
+
+                </div>
+
+            </div>
+
+        {% endfor %}
+
+    </div>
+
+</main>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

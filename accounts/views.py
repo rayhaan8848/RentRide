@@ -10,6 +10,8 @@ from django.core.exceptions import ValidationError, PermissionDenied
 from django.db import IntegrityError, transaction
 from django.urls import reverse
 from django.views.decorators.http import require_POST
+from django.shortcuts import get_object_or_404
+from rentals.models import Vehicle, Category
 
 from .models import User
 
@@ -296,13 +298,36 @@ def log_out(request):
 # CUSTOMER DASHBOARD
 # ==========================================
 
+# ==========================================
+# CUSTOMER DASHBOARD
+# ==========================================
+
 @login_required
 @role_required(User.Role.CUSTOMER)
 def customer_dashboard(request):
 
+    categories = Category.objects.filter(
+        is_active=True
+    )
+
+    vehicles = Vehicle.objects.filter(
+        is_available=True,
+        approval_status=Vehicle.ApprovalStatus.APPROVED,
+        category__is_active=True
+    ).select_related(
+        'category',
+        'owner'
+    )
+
+    context = {
+        'categories': categories,
+        'vehicles': vehicles,
+    }
+
     return render(
         request,
-        'main/home.html'
+        'main/home.html',
+        context
     )
 
 
