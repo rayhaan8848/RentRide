@@ -1,0 +1,293 @@
+
+{% extends 'base.html' %}
+
+{% block title %}Manage Bookings | RentRide{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <!-- PAGE HEADER -->
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+
+        <div>
+            <h2 class="fw-bold">Manage Booking Requests</h2>
+            <p class="text-muted mb-0">
+                Manage booking requests received for your vehicles.
+            </p>
+        </div>
+
+        <a href="{% url 'owner_dashboard' %}" class="btn btn-outline-secondary">
+            Back to Dashboard
+        </a>
+
+    </div>
+
+
+    <!-- BOOKING LIST -->
+    {% if bookings %}
+
+        <div class="row g-4">
+
+            {% for booking in bookings %}
+
+                <div class="col-lg-6">
+
+                    <div class="card shadow-sm border-0 rounded-4 h-100 overflow-hidden">
+
+                        <!-- VEHICLE IMAGE -->
+                        {% if booking.vehicle.main_image %}
+                            <img
+                                src="{{ booking.vehicle.main_image.url }}"
+                                class="card-img-top"
+                                alt="{{ booking.vehicle.name }}"
+                                style="height: 240px; object-fit: cover;"
+                            >
+                        {% endif %}
+
+
+                        <div class="card-body p-4">
+
+                            <!-- VEHICLE INFORMATION -->
+                            <h5 class="fw-bold mb-3">
+                                {{ booking.vehicle.brand }}
+                                {{ booking.vehicle.name }}
+                            </h5>
+
+                            <hr>
+
+
+                            <!-- CUSTOMER INFORMATION -->
+                            <h6 class="fw-bold mb-3">
+                                Customer Information
+                            </h6>
+
+                            <p class="mb-2">
+                                <strong>Name:</strong>
+
+                                {% if booking.customer.fullname %}
+                                    {{ booking.customer.fullname }}
+                                {% else %}
+                                    {{ booking.customer.username }}
+                                {% endif %}
+                            </p>
+
+                            <p class="mb-2">
+                                <strong>Email:</strong>
+                                {{ booking.customer.email }}
+                            </p>
+
+                            <p class="mb-3">
+                                <strong>Phone:</strong>
+                                {{ booking.customer.phone|default:"Not provided" }}
+                            </p>
+
+                            <hr>
+
+
+                            <!-- BOOKING DETAILS -->
+                            <h6 class="fw-bold mb-3">
+                                Booking Details
+                            </h6>
+
+                            <p class="mb-2">
+                                <strong>Pickup Date:</strong>
+                                {{ booking.pickup_date|date:"d M Y" }}
+                            </p>
+
+                            <p class="mb-2">
+                                <strong>Return Date:</strong>
+                                {{ booking.return_date|date:"d M Y" }}
+                            </p>
+
+                            <p class="mb-2">
+                                <strong>Daily Price:</strong>
+                                Rs. {{ booking.daily_price }}
+                            </p>
+
+                            <p class="mb-3">
+                                <strong>Total Price:</strong>
+                                <span class="fw-bold text-success">
+                                    Rs. {{ booking.total_price }}
+                                </span>
+                            </p>
+
+
+                            <!-- CUSTOMER NOTE -->
+                            {% if booking.customer_note %}
+
+                                <div class="bg-light rounded-3 p-3 mb-3">
+
+                                    <strong>Customer Note:</strong>
+
+                                    <p class="mb-0 mt-1">
+                                        {{ booking.customer_note }}
+                                    </p>
+
+                                </div>
+
+                            {% endif %}
+
+
+                            <hr>
+
+
+                            <!-- BOOKING STATUS -->
+                            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+
+                                <strong>Booking Status:</strong>
+
+                                {% if booking.status == 'pending' %}
+
+                                    <span class="badge bg-warning text-dark px-3 py-2">
+                                        Pending
+                                    </span>
+
+                                {% elif booking.status == 'accepted' %}
+
+                                    <span class="badge bg-success px-3 py-2">
+                                        Accepted
+                                    </span>
+
+                                {% elif booking.status == 'rejected' %}
+
+                                    <span class="badge bg-danger px-3 py-2">
+                                        Rejected
+                                    </span>
+
+                                {% elif booking.status == 'cancelled' %}
+
+                                    <span class="badge bg-secondary px-3 py-2">
+                                        Cancelled
+                                    </span>
+
+                                {% elif booking.status == 'completed' %}
+
+                                    <span class="badge bg-primary px-3 py-2">
+                                        Completed
+                                    </span>
+
+                                {% endif %}
+
+                            </div>
+
+
+                            <!-- ACCEPT / REJECT ACTIONS -->
+                            {% if booking.status == 'pending' %}
+
+                                <div class="d-flex gap-2 mt-4">
+
+                                    <!-- ACCEPT BOOKING -->
+                                    <form
+                                        method="POST"
+                                        action="{% url 'accept_booking' booking.id %}"
+                                        class="flex-grow-1"
+                                    >
+
+                                        {% csrf_token %}
+
+                                        <button
+                                            type="submit"
+                                            class="btn btn-success w-100"
+                                            onclick="return confirm('Are you sure you want to accept this booking?');"
+                                        >
+                                            Accept Booking
+                                        </button>
+
+                                    </form>
+
+
+                                    <!-- REJECT BOOKING -->
+                                    <form
+                                        method="POST"
+                                        action="{% url 'reject_booking' booking.id %}"
+                                        class="flex-grow-1"
+                                    >
+
+                                        {% csrf_token %}
+
+                                        <button
+                                            type="submit"
+                                            class="btn btn-outline-danger w-100"
+                                            onclick="return confirm('Are you sure you want to reject this booking?');"
+                                        >
+                                            Reject Booking
+                                        </button>
+
+                                    </form>
+
+                                </div>
+
+                            {% else %}
+
+                                <div class="mt-4">
+
+                                    {% if booking.status == 'accepted' %}
+
+                                        <div class="alert alert-success mb-0">
+                                            This booking has been accepted.
+                                        </div>
+
+                                    {% elif booking.status == 'rejected' %}
+
+                                        <div class="alert alert-danger mb-0">
+                                            This booking has been rejected.
+                                        </div>
+
+                                    {% elif booking.status == 'cancelled' %}
+
+                                        <div class="alert alert-secondary mb-0">
+                                            This booking was cancelled.
+                                        </div>
+
+                                    {% elif booking.status == 'completed' %}
+
+                                        <div class="alert alert-primary mb-0">
+                                            This booking has been completed.
+                                        </div>
+
+                                    {% endif %}
+
+                                </div>
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+
+    {% else %}
+
+        <!-- EMPTY STATE -->
+        <div class="text-center py-5">
+
+            <div class="mb-3">
+                <i class="bi bi-calendar-x display-3 text-muted"></i>
+            </div>
+
+            <h4 class="fw-bold">
+                No Booking Requests Yet
+            </h4>
+
+            <p class="text-muted">
+                You haven't received any booking requests for your vehicles.
+            </p>
+
+            <a href="{% url 'my_vehicles' %}" class="btn btn-primary mt-2">
+                View My Vehicles
+            </a>
+
+        </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

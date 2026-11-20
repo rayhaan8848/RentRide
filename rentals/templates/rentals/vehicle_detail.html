@@ -408,12 +408,26 @@
                     </div>
 
                     <!-- BOOKING WILL BE CONNECTED LATER -->
-                    <a
-                        href="{% url 'log_in' %}"
-                        class="booking-btn"
-                    >
-                        Book This Vehicle
-                    </a>
+                    {% if user.is_authenticated and user.role == 'customer' %}
+
+                        <a href="{% url 'create_booking' vehicle.id %}"
+                        class="booking-btn">
+                            Book This Vehicle
+                        </a>
+
+                    {% elif not user.is_authenticated %}
+
+    <a href="{% url 'log_in' %}" class="booking-btn">
+        Login to Book
+    </a>
+
+{% else %}
+
+    <button class="booking-btn" disabled>
+        Customer Account Required
+    </button>
+
+{% endif %}
 
                     <p class="booking-note">
                         Booking functionality will be available soon.
