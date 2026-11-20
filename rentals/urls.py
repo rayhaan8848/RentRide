@@ -47,5 +47,10 @@ urlpatterns = [
         views.reject_vehicle,
         name='reject_vehicle'
     ),
+    path(
+    'vehicle/<int:vehicle_id>/',
+    views.vehicle_detail,
+    name='vehicle_detail'
+),
 
 ]

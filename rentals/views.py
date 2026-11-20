@@ -8,23 +8,24 @@ from accounts.models import User
 from accounts.views import role_required
 from django.shortcuts import get_object_or_404
 from django.views.decorators.http import require_POST
+from .models import Vehicle, Category, VehicleImage, Location
 
 from .models import Vehicle, Category, VehicleImage
 from .forms import VehicleForm
+from .filters import filter_vehicles
 
 
 def home(request):
 
     categories = Category.objects.filter(is_active=True)
 
-    vehicles = Vehicle.objects.filter(
-        is_available=True,
-        approval_status=Vehicle.ApprovalStatus.APPROVED,
-        category__is_active=True
-    ).select_related('category', 'owner')
+    locations = Location.objects.filter(is_active=True)
+
+    vehicles = filter_vehicles(request)
 
     context = {
         'categories': categories,
+        'locations': locations,
         'vehicles': vehicles,
     }
 
@@ -273,3 +274,30 @@ def reject_vehicle(request, vehicle_id):
     )
 
     return redirect('admin_vehicle_approvals')
+
+# ==========================================
+# VEHICLE DETAIL
+# ==========================================
+
+def vehicle_detail(request, vehicle_id):
+
+    vehicle = get_object_or_404(
+        Vehicle.objects.select_related(
+            'category',
+            'owner'
+        ).prefetch_related('images'),
+        id=vehicle_id,
+        is_available=True,
+        approval_status=Vehicle.ApprovalStatus.APPROVED,
+        category__is_active=True
+    )
+
+    context = {
+        'vehicle': vehicle,
+    }
+
+    return render(
+        request,
+        'rentals/vehicle_detail.html',
+        context
+    )

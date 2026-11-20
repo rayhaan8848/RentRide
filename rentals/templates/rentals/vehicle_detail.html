@@ -1,0 +1,483 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ vehicle.brand }} {{ vehicle.name }} | RentRide{% endblock %}
+
+{% block extra_css %}
+<style>
+    :root {
+        --rr-primary: #2563eb;
+        --rr-dark: #172033;
+        --rr-muted: #64748b;
+        --rr-light: #f5f8fc;
+        --rr-border: #e5eaf2;
+    }
+
+    body {
+        background: var(--rr-light);
+    }
+
+    .detail-wrapper {
+        padding: 55px 0 80px;
+    }
+
+    .breadcrumb-area {
+        margin-bottom: 25px;
+        color: var(--rr-muted);
+        font-size: 14px;
+    }
+
+    .breadcrumb-area a {
+        color: var(--rr-primary);
+        text-decoration: none;
+    }
+
+    .vehicle-gallery,
+    .detail-card,
+    .booking-card,
+    .owner-card {
+        background: #fff;
+        border: 1px solid var(--rr-border);
+        border-radius: 18px;
+        overflow: hidden;
+    }
+
+    .main-image {
+        width: 100%;
+        height: 430px;
+        object-fit: cover;
+        background: #eef2f7;
+    }
+
+    .thumbnail-container {
+        display: flex;
+        gap: 12px;
+        padding: 15px;
+        overflow-x: auto;
+    }
+
+    .thumbnail {
+        width: 105px;
+        height: 75px;
+        flex-shrink: 0;
+        object-fit: cover;
+        border-radius: 10px;
+        cursor: pointer;
+        border: 2px solid transparent;
+    }
+
+    .thumbnail.active {
+        border-color: var(--rr-primary);
+    }
+
+    .vehicle-heading {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 15px;
+        flex-wrap: wrap;
+    }
+
+    .vehicle-title {
+        font-size: clamp(25px, 4vw, 34px);
+        font-weight: 750;
+        color: var(--rr-dark);
+        margin-bottom: 8px;
+    }
+
+    .vehicle-subtitle {
+        color: var(--rr-muted);
+        font-size: 15px;
+    }
+
+    .category-badge {
+        background: #eff6ff;
+        color: var(--rr-primary);
+        padding: 8px 15px;
+        border-radius: 30px;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    .detail-card {
+        padding: 27px;
+        margin-top: 25px;
+    }
+
+    .section-title {
+        color: var(--rr-dark);
+        font-size: 20px;
+        font-weight: 700;
+        margin-bottom: 20px;
+    }
+
+    .spec-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 15px;
+    }
+
+    .spec-item {
+        padding: 17px 12px;
+        background: #f8fafc;
+        border: 1px solid var(--rr-border);
+        border-radius: 12px;
+    }
+
+    .spec-label {
+        display: block;
+        color: var(--rr-muted);
+        font-size: 12px;
+        margin-bottom: 7px;
+    }
+
+    .spec-value {
+        color: var(--rr-dark);
+        font-size: 15px;
+        font-weight: 650;
+    }
+
+    .description-text {
+        color: #526078;
+        line-height: 1.8;
+        white-space: pre-line;
+    }
+
+    .booking-card {
+        padding: 25px;
+        position: sticky;
+        top: 100px;
+    }
+
+    .price-label {
+        color: var(--rr-muted);
+        font-size: 14px;
+    }
+
+    .price-value {
+        color: var(--rr-dark);
+        font-size: 30px;
+        font-weight: 800;
+    }
+
+    .price-value small {
+        color: var(--rr-muted);
+        font-size: 14px;
+        font-weight: 400;
+    }
+
+    .booking-btn {
+        display: block;
+        width: 100%;
+        padding: 14px;
+        border-radius: 11px;
+        background: var(--rr-primary);
+        color: #fff;
+        text-decoration: none;
+        text-align: center;
+        font-weight: 650;
+        border: none;
+        transition: .25s;
+    }
+
+    .booking-btn:hover {
+        background: #1d4ed8;
+        color: #fff;
+        transform: translateY(-2px);
+    }
+
+    .booking-note {
+        font-size: 12px;
+        color: var(--rr-muted);
+        text-align: center;
+        margin-top: 13px;
+    }
+
+    .owner-card {
+        padding: 22px;
+        margin-top: 20px;
+    }
+
+    .owner-avatar {
+        width: 55px;
+        height: 55px;
+        border-radius: 50%;
+        object-fit: cover;
+        background: #e2e8f0;
+    }
+
+    .owner-name {
+        color: var(--rr-dark);
+        font-weight: 700;
+    }
+
+    .owner-label {
+        color: var(--rr-muted);
+        font-size: 13px;
+    }
+
+    @media (max-width: 991px) {
+        .booking-card {
+            position: static;
+            margin-top: 25px;
+        }
+
+        .main-image {
+            height: 350px;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .detail-wrapper {
+            padding: 30px 0 50px;
+        }
+
+        .main-image {
+            height: 250px;
+        }
+
+        .spec-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .detail-card {
+            padding: 20px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<section class="detail-wrapper">
+    <div class="container">
+
+        <!-- BREADCRUMB -->
+        <div class="breadcrumb-area">
+            <a href="{% url 'home' %}">Home</a>
+            <span class="mx-2">/</span>
+            <a href="{% url 'categories' %}">Vehicles</a>
+            <span class="mx-2">/</span>
+            {{ vehicle.name }}
+        </div>
+
+        <div class="row g-4">
+
+            <!-- LEFT SIDE -->
+            <div class="col-lg-8">
+
+                <!-- VEHICLE GALLERY -->
+                <div class="vehicle-gallery">
+
+                    <img
+                        id="mainVehicleImage"
+                        src="{{ vehicle.main_image.url }}"
+                        alt="{{ vehicle.name }}"
+                        class="main-image"
+                    >
+
+                    <div class="thumbnail-container">
+
+                        <img
+                            src="{{ vehicle.main_image.url }}"
+                            class="thumbnail active"
+                            alt="Main vehicle image"
+                            onclick="changeVehicleImage(this)"
+                        >
+
+                        {% for image in vehicle.images.all %}
+                            {% if image.image %}
+                                <img
+                                    src="{{ image.image.url }}"
+                                    class="thumbnail"
+                                    alt="{{ vehicle.name }} gallery image"
+                                    onclick="changeVehicleImage(this)"
+                                >
+                            {% endif %}
+                        {% endfor %}
+
+                    </div>
+                </div>
+
+                <!-- VEHICLE INFORMATION -->
+                <div class="detail-card">
+
+                    <div class="vehicle-heading">
+
+                        <div>
+                            <h1 class="vehicle-title">
+                                {{ vehicle.brand }} {{ vehicle.name }}
+                            </h1>
+
+                            <p class="vehicle-subtitle">
+                                Model Year: {{ vehicle.model_year }}
+                            </p>
+                        </div>
+
+                        <span class="category-badge">
+                            {{ vehicle.category.name }}
+                        </span>
+
+                    </div>
+
+                    <hr class="my-4">
+
+                    <h2 class="section-title">Vehicle Specifications</h2>
+
+                    <div class="spec-grid">
+
+                        <div class="spec-item">
+                            <span class="spec-label">Seats</span>
+                            <span class="spec-value">
+                                {{ vehicle.seats }} Persons
+                            </span>
+                        </div>
+
+                        <div class="spec-item">
+                            <span class="spec-label">Transmission</span>
+                            <span class="spec-value">
+                                {{ vehicle.get_transmission_display }}
+                            </span>
+                        </div>
+
+                        <div class="spec-item">
+                            <span class="spec-label">Fuel Type</span>
+                            <span class="spec-value">
+                                {{ vehicle.get_fuel_type_display }}
+                            </span>
+                        </div>
+
+                        <div class="spec-item">
+                            <span class="spec-label">Model Year</span>
+                            <span class="spec-value">
+                                {{ vehicle.model_year }}
+                            </span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- DESCRIPTION -->
+                <div class="detail-card">
+
+                    <h2 class="section-title">About This Vehicle</h2>
+
+                    <p class="description-text">
+                        {{ vehicle.description|default:"No description provided for this vehicle." }}
+                    </p>
+
+                </div>
+
+            </div>
+
+            <!-- RIGHT SIDE -->
+            <div class="col-lg-4">
+
+                <!-- BOOKING CARD -->
+                <div class="booking-card">
+
+                    <span class="price-label">Rental Price</span>
+
+                    <div class="price-value">
+                        Rs. {{ vehicle.daily_price }}
+                        <small>/ day</small>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <div class="d-flex justify-content-between mb-3">
+                        <span class="text-secondary">Availability</span>
+                        <span class="text-success fw-semibold">
+                            Available
+                        </span>
+                    </div>
+
+                    <div class="d-flex justify-content-between mb-3">
+                        <span class="text-secondary">Category</span>
+                        <span class="fw-semibold">
+                            {{ vehicle.category.name }}
+                        </span>
+                    </div>
+
+                    <div class="d-flex justify-content-between mb-3">
+                        <span class="text-secondary">Brand</span>
+                        <span class="fw-semibold">
+                            {{ vehicle.brand }}
+                        </span>
+                    </div>
+
+                    <!-- BOOKING WILL BE CONNECTED LATER -->
+                    <a
+                        href="{% url 'log_in' %}"
+                        class="booking-btn"
+                    >
+                        Book This Vehicle
+                    </a>
+
+                    <p class="booking-note">
+                        Booking functionality will be available soon.
+                    </p>
+
+                </div>
+
+                <!-- OWNER INFORMATION -->
+                {% if vehicle.owner %}
+                    <div class="owner-card">
+
+                        <h2 class="section-title">Vehicle Owner</h2>
+
+                        <div class="d-flex align-items-center gap-3">
+
+                            {% if vehicle.owner.profile_image %}
+                                <img
+                                    src="{{ vehicle.owner.profile_image.url }}"
+                                    alt="Owner profile"
+                                    class="owner-avatar"
+                                >
+                            {% else %}
+                                <div class="owner-avatar d-flex align-items-center justify-content-center">
+                                    <i class="bi bi-person fs-3 text-secondary"></i>
+                                </div>
+                            {% endif %}
+
+                            <div>
+                                <div class="owner-name">
+                                    {{ vehicle.owner.fullname|default:vehicle.owner.username }}
+                                </div>
+
+                                <div class="owner-label">
+                                    Verified RentRide Owner
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function changeVehicleImage(element) {
+
+        const mainImage = document.getElementById('mainVehicleImage');
+
+        mainImage.src = element.src;
+
+        document.querySelectorAll('.thumbnail').forEach(function(image) {
+            image.classList.remove('active');
+        });
+
+        element.classList.add('active');
+    }
+</script>
+{% endblock %}

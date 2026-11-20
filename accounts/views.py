@@ -1,7 +1,5 @@
-
 from functools import wraps
-
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -10,15 +8,18 @@ from django.core.exceptions import ValidationError, PermissionDenied
 from django.db import IntegrityError, transaction
 from django.urls import reverse
 from django.views.decorators.http import require_POST
-from django.shortcuts import get_object_or_404
-from rentals.models import Vehicle, Category
+
+from rentals.models import Category, Location
+from rentals.filters import filter_vehicles
 
 from .models import User
+
 
 
 # ==========================================
 # SIGNUP REDIRECT
 # ==========================================
+
 
 def signup_redirect():
     return redirect(f"{reverse('signup')}?tab=signup")
@@ -293,11 +294,6 @@ def log_out(request):
 
     return redirect('home')
 
-
-# ==========================================
-# CUSTOMER DASHBOARD
-# ==========================================
-
 # ==========================================
 # CUSTOMER DASHBOARD
 # ==========================================
@@ -310,17 +306,15 @@ def customer_dashboard(request):
         is_active=True
     )
 
-    vehicles = Vehicle.objects.filter(
-        is_available=True,
-        approval_status=Vehicle.ApprovalStatus.APPROVED,
-        category__is_active=True
-    ).select_related(
-        'category',
-        'owner'
+    locations = Location.objects.filter(
+        is_active=True
     )
+
+    vehicles = filter_vehicles(request)
 
     context = {
         'categories': categories,
+        'locations': locations,
         'vehicles': vehicles,
     }
 
@@ -329,8 +323,6 @@ def customer_dashboard(request):
         'main/home.html',
         context
     )
-
-
 # ==========================================
 # VEHICLE OWNER DASHBOARD
 # ==========================================
